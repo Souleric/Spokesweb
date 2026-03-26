@@ -749,6 +749,21 @@ textarea { resize: vertical; min-height: 80px; }
 .qv-save-btn { padding: 8px 22px; background: var(--teal); color: white; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
 .qv-save-btn:hover { opacity: 0.9; }
 
+/* ── CHART OF ACCOUNTS ── */
+.coa-filter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.coa-search-input { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; font-size: 12px; font-family: inherit; outline: none; width: 180px; color: var(--ink); }
+.coa-search-input:focus { border-color: var(--teal); }
+.coa-active-toggle { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink3); cursor: pointer; }
+.coa-toggle-track { width: 32px; height: 18px; border-radius: 9px; background: var(--teal); position: relative; flex-shrink: 0; }
+.coa-toggle-thumb { width: 14px; height: 14px; border-radius: 50%; background: white; position: absolute; top: 2px; right: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+.coa-group-hdr { font-size: 12px; font-weight: 600; color: var(--ink3); background: var(--cream); padding: 6px 12px; }
+.coa-group-hdr td { padding: 6px 12px !important; }
+.coa-sys-badge { display: inline-flex; padding: 2px 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 11px; color: var(--ink3); background: var(--white); }
+.coa-lock-icon { color: var(--muted2); vertical-align: middle; margin-left: 4px; }
+.coa-lock-icon svg { width: 11px; height: 11px; stroke-width: 2; }
+.coa-sub-row td:nth-child(2) { padding-left: 28px !important; }
+.coa-bal { font-family: 'DM Mono', monospace; font-size: 12px; text-align: right; }
+
 /* ── BUKKU TABS (invoice / list page tab strip) ── */
 .bukku-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
 .bukku-tab {
@@ -2447,30 +2462,99 @@ Setup a default remarks in Control Panel -> Company Settings."></textarea>
 
     <!-- ════ CHART OF ACCOUNTS ════ -->
     <div class="page" id="pg-coa">
-      <div class="alert alert-teal">MASB-compliant chart of accounts, pre-configured for Malaysian businesses.</div>
-      <div style="display:flex;flex-direction:column;gap:12px;">
-        <div class="card"><div class="card-head"><div class="card-title">Assets</div><button class="btn btn-ghost btn-sm">+ Add Account</button></div>
-          <table class="tbl"><thead><tr><th>Code</th><th>Account Name</th><th>Type</th><th style="text-align:right">Balance</th></tr></thead><tbody>
-            <tr><td class="mono">1100</td><td>Cash in Hand</td><td>Current Asset</td><td class="mono" style="text-align:right">RM 8,400.00</td></tr>
-            <tr><td class="mono">1110</td><td>Maybank Current Account</td><td>Current Asset</td><td class="mono" style="text-align:right">RM 142,600.00</td></tr>
-            <tr><td class="mono">1120</td><td>CIMB Business Account</td><td>Current Asset</td><td class="mono" style="text-align:right">RM 63,900.00</td></tr>
-            <tr><td class="mono">1200</td><td>Accounts Receivable</td><td>Current Asset</td><td class="mono" style="text-align:right">RM 62,480.00</td></tr>
-          </tbody></table>
+      <!-- Page header -->
+      <div class="bk-page-header">
+        <div>
+          <div class="bk-breadcrumb">
+            <span>Accounting</span>
+            <span class="bk-breadcrumb-sep">/</span>
+            <span style="color:var(--ink);font-weight:700">Chart of Accounts</span>
+          </div>
+          <div class="bk-page-desc">A list of accounts in your company's general ledger.</div>
         </div>
-        <div class="card"><div class="card-head"><div class="card-title">Liabilities</div></div>
-          <table class="tbl"><thead><tr><th>Code</th><th>Account Name</th><th>Type</th><th style="text-align:right">Balance</th></tr></thead><tbody>
-            <tr><td class="mono">2100</td><td>Accounts Payable</td><td>Current Liability</td><td class="mono" style="text-align:right">RM 28,150.00</td></tr>
-            <tr><td class="mono">2200</td><td>SST Payable</td><td>Tax Liability</td><td class="mono" style="text-align:right">RM 9,210.00</td></tr>
-            <tr><td class="mono">2300</td><td>EPF/SOCSO Payable</td><td>Current Liability</td><td class="mono" style="text-align:right">RM 9,240.00</td></tr>
-          </tbody></table>
+        <div class="bk-header-actions">
+          <button class="btn-new-primary" onclick="openCOAModal()">+ New</button>
         </div>
-        <div class="card"><div class="card-head"><div class="card-title">Revenue & Expenses</div></div>
-          <table class="tbl"><thead><tr><th>Code</th><th>Account Name</th><th>Type</th><th style="text-align:right">YTD</th></tr></thead><tbody>
-            <tr><td class="mono">4000</td><td>Service Revenue</td><td>Revenue</td><td class="mono" style="text-align:right;color:var(--green)">RM 487,320.00</td></tr>
-            <tr><td class="mono">5000</td><td>Salaries & Wages</td><td>Operating Expense</td><td class="mono" style="text-align:right;color:var(--red)">RM 198,000.00</td></tr>
-            <tr><td class="mono">5100</td><td>EPF – Employer Contribution (13%)</td><td>Statutory Expense</td><td class="mono" style="text-align:right;color:var(--red)">RM 25,740.00</td></tr>
-            <tr><td class="mono">5200</td><td>Rent & Office</td><td>Operating Expense</td><td class="mono" style="text-align:right;color:var(--red)">RM 27,000.00</td></tr>
-          </tbody></table>
+      </div>
+
+      <!-- Tabs -->
+      <div class="bukku-tabs" id="coaTabs">
+        <div class="bukku-tab bukku-tab-active" onclick="selBukkuTab(this);renderCOATable()">All</div>
+        <div class="bukku-tab" onclick="selBukkuTab(this);renderCOATable()">Assets</div>
+        <div class="bukku-tab" onclick="selBukkuTab(this);renderCOATable()">Liabilities</div>
+        <div class="bukku-tab" onclick="selBukkuTab(this);renderCOATable()">Equity</div>
+        <div class="bukku-tab" onclick="selBukkuTab(this);renderCOATable()">Income</div>
+        <div class="bukku-tab" onclick="selBukkuTab(this);renderCOATable()">Expenses</div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="coa-filter-bar">
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-size:12px;color:var(--ink3)">Search</span>
+          <input class="coa-search-input" id="coaSearch" type="text" placeholder="" oninput="renderCOATable()">
+        </div>
+        <div class="coa-active-toggle">
+          <div class="coa-toggle-track"><div class="coa-toggle-thumb"></div></div>
+          <span>Active Only</span>
+        </div>
+        <button class="filter-icon-btn" title="Search"><i data-lucide="search"></i></button>
+        <button class="filter-icon-btn" title="Reset" onclick="document.getElementById('coaSearch').value='';renderCOATable()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+
+      <!-- Table -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="tbl" id="coaTable" style="font-size:12px">
+          <thead>
+            <tr>
+              <th style="width:36px"></th>
+              <th class="sortable" style="width:110px">Code <span class="sort-icon">⇅</span></th>
+              <th class="sortable">Account <span class="sort-icon">⇅</span></th>
+              <th style="width:220px">System Account</th>
+              <th style="width:50px"></th>
+              <th class="sortable" style="width:110px;text-align:right">Balance <span class="sort-icon">⇅</span></th>
+              <th style="width:100px">Action</th>
+            </tr>
+          </thead>
+          <tbody id="coaTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- COA Modal -->
+    <div class="modal-bg" id="coaModal">
+      <div class="modal" style="width:440px">
+        <div class="modal-title" id="coaModalTitle">New Account</div>
+        <input type="hidden" id="coaEditIndex">
+        <div id="coaError" class="tax-error" style="display:none"></div>
+        <div class="fg">
+          <label>Account Code *</label>
+          <input id="coaCode" class="qv-input" type="text" placeholder="e.g. 5100">
+        </div>
+        <div class="fg">
+          <label>Account Name *</label>
+          <input id="coaName" class="qv-input" type="text" placeholder="e.g. Consulting Revenue">
+        </div>
+        <div class="fg">
+          <label>Type *</label>
+          <select id="coaType" class="qv-select">
+            <option value="Assets">Assets</option>
+            <option value="Liabilities">Liabilities</option>
+            <option value="Equity">Equity</option>
+            <option value="Income" selected>Income</option>
+            <option value="Expenses">Expenses</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Group</label>
+          <input id="coaGroup" class="qv-input" type="text" placeholder="e.g. Income">
+        </div>
+        <div class="fg">
+          <label>System Account</label>
+          <input id="coaSysAccount" class="qv-input" type="text" placeholder="Leave blank if none">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" onclick="closeModal('coaModal')">Cancel</button>
+          <button class="btn btn-primary" onclick="saveCOA()">Save</button>
         </div>
       </div>
     </div>
@@ -2836,7 +2920,7 @@ const pgConfig = {
   customers:    { title:'Customers',          sub:'Manage your customer database' },
   suppliers:    { title:'Suppliers',          sub:'Manage your supplier records' },
   transactions: { title:'Transactions',       sub:'All bank and cash transactions' },
-  coa:          { title:'Chart of Accounts',  sub:'MASB-compliant account structure' },
+  coa:          { title:'Accounting / Chart of Accounts', sub:'A list of accounts in your company\'s general ledger.' },
   journal:      { title:'Journal Entries',    sub:'Double-entry accounting records' },
   sst:          { title:'SST / GST Return',   sub:'Royal Malaysian Customs Department (RMCD)' },
   reports:      { title:'Financial Reports',  sub:'P&L · Balance Sheet · Cash Flow · SST' },
@@ -2870,6 +2954,7 @@ function navSub(id, el) {
   document.getElementById('pgSub').textContent = c.sub || '';
   // Page-specific init hooks
   if (id === 'tax') renderTaxTable();
+  if (id === 'coa') renderCOATable();
 }
 
 // Quotation detail tab scroll
@@ -2979,11 +3064,7 @@ function invAddRow(data) {
       <textarea class="inv-tbl-textarea" placeholder="Description (optional)">${escHtml(data.desc||'')}</textarea>
     </td>
     <td>
-      <select class="inv-tbl-select inv-account-select">
-        <option value="5000" ${data.account==='5000'||!data.account?'selected':''}>5000 Sales Income</option>
-        <option value="5100" ${data.account==='5100'?'selected':''}>5100 Service Revenue</option>
-        <option value="4000" ${data.account==='4000'?'selected':''}>4000 Other Income</option>
-      </select>
+      <select class="inv-tbl-select inv-account-select">${invBuildAccountOptions()}</select>
     </td>
     <td><input class="inv-tbl-num inv-qty"   type="number" value="${data.qty  !=null?data.qty  :1}" min="0" step="any"></td>
     <td><input class="inv-tbl-num inv-price" type="number" value="${data.price!=null?data.price:0}" min="0" step="any"></td>
@@ -3004,6 +3085,15 @@ function invAddRow(data) {
   tr.querySelector('.inv-price').addEventListener('input',    () => invCalcRow(tr));
   tr.querySelector('.inv-disc-val').addEventListener('input', () => invCalcRow(tr));
   tr.querySelector('.inv-tax-select').addEventListener('change', invCalcTotals);
+  // Pre-select account
+  if (data.account) {
+    const acSel = tr.querySelector('.inv-account-select');
+    [...acSel.options].forEach(o => { if (o.value === data.account) o.selected = true; });
+  } else {
+    // Default to 5000
+    const acSel = tr.querySelector('.inv-account-select');
+    [...acSel.options].forEach(o => { if (o.value === '5000') o.selected = true; });
+  }
   // Pre-select tax
   if (data.taxCode) {
     const sel = tr.querySelector('.inv-tax-select');
@@ -3166,6 +3256,185 @@ months.forEach((m,i) => {
   g.innerHTML = `<div class="bar-pair" style="height:100px"><div class="bar income" style="height:${rh}%" title="Revenue: RM ${rev[i]}k"></div><div class="bar expense" style="height:${eh}%" title="Expenses: RM ${exp[i]}k"></div></div><div class="bar-lbl">${m}</div>`;
   bc.appendChild(g);
 });
+
+// ── CHART OF ACCOUNTS ──
+
+const defaultCOA = [
+  { group:'Current Assets',        type:'Assets',      code:'1000',    name:'Bank & Cash Accounts',                  sysAccount:'Bank & Cash',                locked:false, hasCur:true,  balance:0 },
+  { group:'Current Assets',        type:'Assets',      code:'1000-00', name:'Cash on Hand',                          sysAccount:'Bank & Cash',                locked:false, hasCur:true,  balance:0,         sub:true },
+  { group:'Current Assets',        type:'Assets',      code:'1000-01', name:'Bank Account',                          sysAccount:'Bank & Cash',                locked:false, hasCur:true,  balance:0,         sub:true },
+  { group:'Current Assets',        type:'Assets',      code:'1001',    name:'Accounts Receivable',                   sysAccount:'Accounts Receivable',        locked:false, hasCur:true,  balance:1374111.50 },
+  { group:'Current Assets',        type:'Assets',      code:'1002',    name:'Inventory',                             sysAccount:'Inventory',                  locked:false, hasCur:true,  balance:0 },
+  { group:'Current Assets',        type:'Assets',      code:'1003',    name:'Undeposited Funds',                     sysAccount:'',                           locked:false, hasCur:true,  balance:0 },
+  { group:'Non-Current Assets',    type:'Assets',      code:'1500',    name:'Property, Plant & Equipment',           sysAccount:'',                           locked:false, hasCur:true,  balance:0 },
+  { group:'Current Liabilities',   type:'Liabilities', code:'3000',    name:'Credit Card Accounts',                  sysAccount:'Credit Card',                locked:false, hasCur:true,  balance:0 },
+  { group:'Current Liabilities',   type:'Liabilities', code:'3001',    name:'Accounts Payable',                      sysAccount:'Accounts Payable',           locked:false, hasCur:true,  balance:0 },
+  { group:'Current Liabilities',   type:'Liabilities', code:'3002',    name:'SST Payable',                           sysAccount:'SST Payable',                locked:true,  hasCur:true,  balance:0 },
+  { group:'Current Liabilities',   type:'Liabilities', code:'3003',    name:'SST Deferred',                          sysAccount:'SST Deferred',               locked:true,  hasCur:true,  balance:62065.06 },
+  { group:'Current Liabilities',   type:'Liabilities', code:'3004',    name:'EPF Control',                           sysAccount:'EPF Control',                locked:true,  hasCur:true,  balance:0 },
+  { group:'Current Liabilities',   type:'Liabilities', code:'3005',    name:'SOCSO Control',                         sysAccount:'SOCSO Control',              locked:true,  hasCur:true,  balance:0 },
+  { group:'Current Liabilities',   type:'Liabilities', code:'3006',    name:'EIS Control',                           sysAccount:'EIS Control',                locked:true,  hasCur:true,  balance:0 },
+  { group:'Current Liabilities',   type:'Liabilities', code:'3007',    name:'MTD Control',                           sysAccount:'MTD Control',                locked:true,  hasCur:true,  balance:0 },
+  { group:'Current Liabilities',   type:'Liabilities', code:'3008',    name:'Salary Control',                        sysAccount:'Salary Control',             locked:true,  hasCur:true,  balance:0 },
+  { group:'Current Liabilities',   type:'Liabilities', code:'3009',    name:'Goods Received Not Invoiced',           sysAccount:'Goods Received Not Invoiced',locked:true,  hasCur:true,  balance:0 },
+  { group:'Equity',                type:'Equity',      code:'4000',    name:'Retained Earnings',                     sysAccount:'Retained Earnings',          locked:true,  hasCur:false, balance:null },
+  { group:'Equity',                type:'Equity',      code:'4001',    name:"Owner's Share Capital",                 sysAccount:'',                           locked:false, hasCur:true,  balance:0 },
+  { group:'Income',                type:'Income',      code:'5000',    name:'Sales Income',                          sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Income',                type:'Income',      code:'5001',    name:'Discount Given',                        sysAccount:'Discount Given',             locked:true,  hasCur:false, balance:null },
+  { group:'Other Income',          type:'Income',      code:'5500',    name:'Interest Earned',                       sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Cost of Sales',         type:'Expenses',    code:'6000',    name:'Cost of Sales',                         sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Cost of Sales',         type:'Expenses',    code:'6001',    name:'Inventory Adjustment',                  sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6500',    name:'SST Expense',                           sysAccount:'SST Expense',                locked:true,  hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6501',    name:"EPF - Employer's Contribution",         sysAccount:'EPF Expense',                locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6502',    name:"SOCSO - Employer's Contribution",       sysAccount:'SOCSO Expense',              locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6503',    name:"EIS - Employer's Contribution",         sysAccount:'EIS Expense',                locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6504',    name:"MTD - Employer's Contribution",         sysAccount:'MTD Expense',                locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6505',    name:'Salaries & Wages',                      sysAccount:'Salary Expense',             locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6506',    name:'Rounding Loss',                         sysAccount:'Rounding Loss',              locked:true,  hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6507',    name:'Exchange Loss',                         sysAccount:'Exchange Loss',              locked:true,  hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6508',    name:'General Expense',                       sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6509',    name:'Interest Paid',                         sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6510',    name:'Bank Charges',                          sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6511',    name:'Advertising & Promotion',               sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6512',    name:'Water & Electricity',                   sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6513',    name:'Telephone & Internet',                  sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6514',    name:'Legal Fees',                            sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6515',    name:'Accounting & Other Professional Fees',  sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6516',    name:'Rent Expense',                          sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6517',    name:'Office Expense',                        sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6518',    name:'Printing & Stationery',                 sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6519',    name:'Meal & Entertainment',                  sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6520',    name:'Travel Expense',                        sysAccount:'',                           locked:false, hasCur:false, balance:null },
+  { group:'Expenses',              type:'Expenses',    code:'6521',    name:'Daily Commute Expense',                 sysAccount:'',                           locked:false, hasCur:false, balance:null },
+];
+
+let coaAccounts = JSON.parse(localStorage.getItem('sw_coa') || 'null') || defaultCOA;
+function saveCOAToStorage() { localStorage.setItem('sw_coa', JSON.stringify(coaAccounts)); }
+
+function renderCOATable() {
+  const tbody  = document.getElementById('coaTbody');
+  if (!tbody) return;
+  const search = (document.getElementById('coaSearch')?.value || '').toLowerCase();
+  const activeTab = document.querySelector('#coaTabs .bukku-tab-active')?.textContent.trim() || 'All';
+
+  const typeMap = { Assets: ['Assets'], Liabilities: ['Liabilities'], Equity: ['Equity'], Income: ['Income'], Expenses: ['Expenses'], All: null };
+  const allowedTypes = typeMap[activeTab];
+
+  let filtered = coaAccounts.filter(a => {
+    if (allowedTypes && !allowedTypes.includes(a.type)) return false;
+    if (search && !a.code.toLowerCase().includes(search) && !a.name.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  // Group by group
+  const groups = [];
+  const seen = {};
+  filtered.forEach(a => {
+    if (!seen[a.group]) { seen[a.group] = true; groups.push(a.group); }
+  });
+
+  tbody.innerHTML = '';
+  groups.forEach(grp => {
+    // Group header row
+    const gh = document.createElement('tr');
+    gh.className = 'coa-group-hdr';
+    gh.innerHTML = `<td colspan="7" style="font-size:12px;font-weight:600;color:var(--ink3)">${escHtml(grp)}</td>`;
+    tbody.appendChild(gh);
+
+    filtered.filter(a => a.group === grp).forEach((a, i) => {
+      const tr = document.createElement('tr');
+      if (a.sub) tr.className = 'coa-sub-row';
+      const balCell = a.balance !== null
+        ? `<td style="width:50px;color:var(--muted);font-size:11px;text-align:right">${a.hasCur ? 'RM' : ''}</td>
+           <td class="coa-bal">${a.balance.toLocaleString('en-MY',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>`
+        : `<td></td><td class="coa-bal" style="color:var(--muted)">-</td>`;
+      const lockIcon = a.locked
+        ? `<span class="coa-lock-icon"><i data-lucide="lock"></i></span>` : '';
+      const sysCell = a.sysAccount
+        ? `<span class="coa-sys-badge">${escHtml(a.sysAccount)}</span>` : '';
+      const idx = coaAccounts.indexOf(a);
+      tr.innerHTML = `
+        <td style="width:36px"><input type="checkbox" style="accent-color:var(--teal)"></td>
+        <td class="mono" style="font-size:12px">${escHtml(a.code)}</td>
+        <td style="font-size:12px">${escHtml(a.name)}${lockIcon}</td>
+        <td>${sysCell}</td>
+        ${balCell}
+        <td>
+          <div style="display:flex;gap:4px">
+            <button class="btn-tbl-view" onclick="editCOA(${idx})">View</button>
+            ${!a.locked ? `<button class="btn-tbl-more" onclick="deleteCOA(${idx},this)">···</button>` : '<button class="btn-tbl-more">···</button>'}
+          </div>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  });
+  lucide.createIcons();
+}
+
+function openCOAModal(editIdx) {
+  document.getElementById('coaModalTitle').textContent = editIdx !== undefined ? 'Edit Account' : 'New Account';
+  document.getElementById('coaEditIndex').value = editIdx !== undefined ? editIdx : '';
+  document.getElementById('coaError').style.display = 'none';
+  if (editIdx !== undefined) {
+    const a = coaAccounts[editIdx];
+    document.getElementById('coaCode').value       = a.code;
+    document.getElementById('coaName').value       = a.name;
+    document.getElementById('coaType').value       = a.type;
+    document.getElementById('coaGroup').value      = a.group;
+    document.getElementById('coaSysAccount').value = a.sysAccount;
+  } else {
+    document.getElementById('coaCode').value       = '';
+    document.getElementById('coaName').value       = '';
+    document.getElementById('coaType').value       = 'Income';
+    document.getElementById('coaGroup').value      = '';
+    document.getElementById('coaSysAccount').value = '';
+  }
+  document.getElementById('coaModal').classList.add('open');
+}
+
+function editCOA(idx) { openCOAModal(idx); }
+
+function deleteCOA(idx, btn) {
+  const a = coaAccounts[idx];
+  if (!confirm(`Delete account "${a.code} – ${a.name}"?`)) return;
+  coaAccounts.splice(idx, 1);
+  saveCOAToStorage();
+  renderCOATable();
+}
+
+function saveCOA() {
+  const code      = document.getElementById('coaCode').value.trim();
+  const name      = document.getElementById('coaName').value.trim();
+  const type      = document.getElementById('coaType').value;
+  const group     = document.getElementById('coaGroup').value.trim() || type;
+  const sysAcct   = document.getElementById('coaSysAccount').value.trim();
+  const editIdx   = document.getElementById('coaEditIndex').value;
+  const errEl     = document.getElementById('coaError');
+  errEl.style.display = 'none';
+  if (!code) { errEl.textContent = 'Account code is required.'; errEl.style.display=''; return; }
+  if (!name) { errEl.textContent = 'Account name is required.';  errEl.style.display=''; return; }
+  const dup = coaAccounts.findIndex(a => a.code === code);
+  if (dup !== -1 && dup !== parseInt(editIdx)) { errEl.textContent = `Code "${code}" already exists.`; errEl.style.display=''; return; }
+  const entry = { group, type, code, name, sysAccount: sysAcct, locked: false, hasCur: ['Assets','Liabilities','Equity'].includes(type), balance: 0 };
+  if (editIdx !== '') { coaAccounts[parseInt(editIdx)] = entry; }
+  else {
+    // Insert in code order
+    const insertAt = coaAccounts.findIndex(a => a.code > code);
+    insertAt === -1 ? coaAccounts.push(entry) : coaAccounts.splice(insertAt, 0, entry);
+  }
+  saveCOAToStorage();
+  renderCOATable();
+  closeModal('coaModal');
+}
+
+// Build account options for invoice/quotation item rows (income + expense accounts)
+function invBuildAccountOptions() {
+  const incomeTypes = ['Income', 'Expenses', 'Cost of Sales'];
+  return coaAccounts
+    .filter(a => incomeTypes.includes(a.type))
+    .map(a => `<option value="${escHtml(a.code)}">${escHtml(a.code)} ${escHtml(a.name)}</option>`)
+    .join('');
+}
 
 // Init Lucide icons
 lucide.createIcons();
