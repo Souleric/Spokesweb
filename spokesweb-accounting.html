@@ -1,0 +1,3048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spokesweb Accounting — Malaysia</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.js"></script>
+<style>
+:root {
+  /* Bukku-inspired Navy / Blue / Cyan Palette */
+  --teal:        #4183D7;   /* primary blue */
+  --teal-dark:   #1C2B3A;   /* sidebar dark navy */
+  --teal-mid:    #5A93E0;   /* blue-mid */
+  --teal-light:  #EBF3FC;   /* blue-light bg */
+  --teal-faint:  #F4F7FB;   /* very light blue tint */
+  --orange:      #1DBED8;   /* cyan accent (replaces orange) */
+  --orange-light:#E5F8FC;   /* cyan light */
+  --orange-mid:  #25CCEB;   /* cyan mid */
+  --cream:       #F1F3F7;   /* main background grey */
+  --cream2:      #E5E8EE;   /* secondary bg */
+  --ink:         #1A2435;
+  --ink2:        #2A3548;
+  --ink3:        #4A5568;
+  --muted:       #8898AA;
+  --muted2:      #9EADC0;
+  --border:      #D8DEE7;
+  --border2:     #C0CBD8;
+  --white:       #FFFFFF;
+  --green:       #1E8A5A;
+  --green-bg:    #E8F5EE;
+  --red:         #C0392B;
+  --red-bg:      #FDECEA;
+  --amber:       #C17C10;
+  --amber-bg:    #FEF6E7;
+  /* Bukku metric card blues */
+  --card-blue1:  #4D96DA;   /* Invoice coming due */
+  --card-blue2:  #2355AE;   /* Invoice overdue */
+  --card-blue3:  #3766B4;   /* Bills coming due */
+  --card-blue4:  #1D3F8C;   /* Bills overdue */
+  /* Bukku lime-green for charts */
+  --lime:        #9DC820;
+
+  --radius: 10px;
+  --radius-sm: 7px;
+  --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --transition: 0.16s cubic-bezier(0.4,0,0.2,1);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 248px;
+  min-width: 248px;
+  background: var(--teal-dark);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Subtle diagonal texture */
+.sidebar::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent, transparent 14px,
+    rgba(255,255,255,0.015) 14px, rgba(255,255,255,0.015) 15px
+  );
+  pointer-events: none;
+}
+
+.logo-area {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+/* SVG-based globe logo matching Spokesweb brand */
+.logo-icon {
+  width: 40px; height: 40px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.logo-text-wrap { flex: 1; }
+.logo-name {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: #FFFFFF;
+  letter-spacing: -0.2px;
+  line-height: 1;
+}
+.logo-sub {
+  font-size: 10px;
+  color: var(--muted2);
+  font-weight: 500;
+  margin-top: 3px;
+  letter-spacing: 0.3px;
+}
+
+.company-pill {
+  margin: 14px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+.company-pill:hover { background: rgba(255,255,255,0.1); }
+.company-pill-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.9); }
+.company-pill-sub { font-size: 10px; color: var(--muted2); margin-top: 2px; }
+.company-pill-arrow { color: var(--muted2); font-size: 11px; }
+
+.nav-group { padding: 6px 12px; }
+.nav-group-label {
+  font-size: 9px; font-weight: 700;
+  color: var(--muted2);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  padding: 10px 8px 5px;
+  opacity: 0.7;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: rgba(255,255,255,0.6);
+  font-size: 13px; font-weight: 500;
+  transition: var(--transition);
+  position: relative;
+}
+.nav-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+.nav-item.active {
+  background: rgba(255,255,255,0.12);
+  color: #FFFFFF;
+}
+.nav-item.active::before {
+  content: '';
+  position: absolute; left: -12px; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 22px;
+  background: var(--orange);   /* --orange is now cyan */
+  border-radius: 0 3px 3px 0;
+}
+.nav-icon { width: 20px; display: flex; align-items: center; justify-content: center; opacity: 0.85; flex-shrink: 0; }
+.nav-icon svg { width: 15px; height: 15px; stroke-width: 1.8; }
+.kpi-icon-bg svg { width: 20px; height: 20px; stroke-width: 1.8; stroke: white; }
+.list-action-btn svg, .filter-icon-btn svg, .pag-grid-btn svg { width: 14px; height: 14px; stroke-width: 1.8; }
+.row-icon-btn svg { width: 13px; height: 13px; stroke-width: 1.8; }
+.qv-customer-edit svg { width: 13px; height: 13px; stroke-width: 1.8; }
+.qv-date-icon svg { width: 14px; height: 14px; stroke-width: 1.8; }
+.qv-eye-btn svg { width: 14px; height: 14px; stroke-width: 1.8; }
+.qv-ch-icon svg { width: 12px; height: 12px; stroke-width: 1.8; }
+.qv-doc-btn svg { width: 15px; height: 15px; stroke-width: 1.8; }
+.qv-warn-icon svg { width: 14px; height: 14px; stroke: #f59e0b; fill: none; stroke-width: 1.8; }
+.qv-add-item-btn svg { width: 13px; height: 13px; stroke-width: 1.8; }
+.qa svg { width: 14px; height: 14px; stroke-width: 1.8; }
+.nav-badge {
+  margin-left: auto;
+  background: var(--orange);
+  color: white;
+  font-size: 9px; font-weight: 700;
+  padding: 2px 7px; border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px 16px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+}
+.user-row {
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+}
+.user-avatar {
+  width: 34px; height: 34px;
+  background: var(--orange);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: white;
+  flex-shrink: 0;
+}
+.user-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.9); }
+.user-role { font-size: 10px; color: var(--muted2); margin-top: 1px; }
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.page-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.2px;
+}
+.page-sub { font-size: 11px; color: var(--muted); font-weight: 500; margin-top: 1px; }
+
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; border: none;
+  transition: var(--transition);
+  font-family: inherit;
+  letter-spacing: -0.1px;
+}
+.btn-primary {
+  background: var(--teal);
+  color: white;
+  box-shadow: 0 2px 8px rgba(43,107,94,0.3);
+}
+.btn-primary:hover { background: var(--teal-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(43,107,94,0.35); }
+.btn-secondary {
+  background: var(--orange);
+  color: white;
+  box-shadow: 0 2px 8px rgba(200,75,42,0.25);
+}
+.btn-secondary:hover { background: var(--orange-mid); transform: translateY(-1px); }
+.btn-ghost {
+  background: transparent;
+  color: var(--ink3);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { background: var(--teal-faint); border-color: var(--teal-mid); color: var(--teal); }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+
+.content { flex: 1; overflow-y: auto; padding: 24px 28px; }
+
+/* ── PAGES ── */
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:translateY(0) } }
+
+/* ── KPI GRID ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.kpi-card {
+  border-radius: var(--radius);
+  padding: 18px 20px 16px;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
+  cursor: default;
+  /* Default: colored full-bleed card (Bukku style) */
+  color: #fff;
+  border: none;
+}
+.kpi-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+/* Four blue shades matching Bukku metric cards */
+.kpi-teal   { background: var(--card-blue1); }
+.kpi-orange { background: var(--card-blue2); }
+.kpi-green  { background: var(--card-blue3); }
+.kpi-amber  { background: var(--card-blue4); }
+
+.kpi-label {
+  font-size: 10px; font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  text-transform: uppercase; letter-spacing: 1.1px;
+}
+.kpi-value {
+  font-family: 'DM Mono', monospace;
+  font-size: 22px; font-weight: 500;
+  color: #fff;
+  margin: 7px 0 5px;
+  letter-spacing: -0.5px;
+}
+.kpi-value .myr { font-size: 13px; color: rgba(255,255,255,0.75); margin-right: 2px; font-family: 'Inter', sans-serif; font-weight: 600; }
+.kpi-change { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.8); }
+.kpi-change.up    { color: rgba(255,255,255,0.9); }
+.kpi-change.down  { color: rgba(255,200,200,0.9); }
+.kpi-change.neutral { color: rgba(255,255,255,0.7); }
+.kpi-icon-bg {
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.18);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+
+/* ── CARDS ── */
+.grid-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 14px; margin-bottom: 14px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px; }
+.grid-report { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px; }
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.card-head {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--white);
+}
+.card-title { font-size: 13px; font-weight: 600; color: var(--orange); }
+.card-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.card-body { padding: 18px 20px; }
+
+/* ── TABLE ── */
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th {
+  font-size: 10px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.9px;
+  padding: 10px 16px; text-align: left;
+  background: var(--teal-faint);
+  border-bottom: 1px solid var(--border);
+}
+.tbl td {
+  padding: 11px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink2);
+}
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tbody tr:hover td { background: var(--blue-faint, #F4F7FB); }
+.mono { font-family: 'DM Mono', monospace; font-size: 12px; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.3px;
+}
+.badge-paid { background: var(--green-bg); color: var(--green); }
+.badge-pending { background: var(--amber-bg); color: var(--amber); }
+.badge-overdue { background: var(--red-bg); color: var(--red); }
+.badge-draft { background: var(--cream2); color: var(--ink3); border: 1px solid var(--border); }
+/* Invoice status badges — Bukku style with dropdown chevron */
+.inv-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.inv-badge-coming-due { background: transparent; color: #D97706; border: 1px solid #D97706; }
+.inv-badge-overdue    { background: var(--red-bg); color: var(--red); border: 1px solid transparent; }
+.inv-badge-outstanding{ background: var(--amber-bg); color: var(--amber); border: 1px solid transparent; }
+.inv-badge-paid       { background: var(--green-bg); color: var(--green); border: 1px solid transparent; }
+.inv-badge-partial    { background: var(--teal-light); color: var(--teal); border: 1px solid transparent; }
+.inv-badge-draft      { background: var(--cream2); color: var(--ink3); border: 1px solid var(--border); }
+.inv-badge-chevron    { font-size: 9px; opacity: 0.7; }
+
+/* ── CHART BARS ── */
+.bar-chart-wrap { display: flex; align-items: flex-end; gap: 9px; height: 110px; }
+.bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.bar-pair { flex: 1; width: 100%; display: flex; align-items: flex-end; gap: 3px; }
+.bar {
+  flex: 1; border-radius: 4px 4px 0 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+  min-height: 3px;
+}
+.bar:hover { opacity: 0.75; }
+.bar.income { background: var(--lime); }
+.bar.expense { background: var(--cream2); border: 1px solid var(--border2); }
+.bar-lbl { font-size: 9px; color: var(--muted); font-weight: 600; }
+
+/* ── DONUT ── */
+.donut-wrap { display: flex; align-items: center; gap: 18px; }
+.legend { flex: 1; }
+.legend-item { display: flex; align-items: center; gap: 8px; padding: 5px 0; }
+.legend-dot { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
+.legend-name { flex: 1; font-size: 12px; color: var(--ink3); }
+.legend-pct { font-size: 11px; font-weight: 700; color: var(--ink); font-family: 'DM Mono', monospace; }
+
+/* ── FORMS ── */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.fg { display: flex; flex-direction: column; gap: 5px; }
+.fg.full { grid-column: 1/-1; }
+label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; }
+input, select, textarea {
+  background: var(--teal-faint);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  color: var(--ink);
+  font-size: 13px; font-family: inherit;
+  transition: var(--transition);
+  outline: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--teal-mid);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(43,107,94,0.1);
+}
+select option { background: var(--white); }
+textarea { resize: vertical; min-height: 80px; }
+
+/* ── TABS ── */
+.tabs {
+  display: flex; gap: 2px; padding: 4px;
+  background: var(--cream2);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  width: fit-content;
+}
+.tab {
+  padding: 7px 16px; border-radius: 7px;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer; color: var(--muted);
+  transition: var(--transition);
+}
+.tab.active { background: var(--white); color: var(--teal); box-shadow: 0 1px 4px rgba(43,107,94,0.1); }
+
+/* ── QUICK ACTIONS ── */
+.qa-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.qa {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 12px; font-weight: 600;
+  cursor: pointer; color: var(--ink3);
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+.qa:hover { background: var(--teal-light); border-color: var(--teal-mid); color: var(--teal); transform: translateY(-1px); }
+
+/* ── SST ── */
+.sst-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--teal-light);
+  color: var(--teal-dark);
+  border: 1px solid var(--teal-mid);
+  padding: 2px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 700;
+}
+.sst-box {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 14px;
+}
+.sst-box-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.sst-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--ink2); }
+.sst-row:last-child { border-bottom: none; }
+.sst-payable {
+  background: linear-gradient(135deg, var(--card-blue2), var(--card-blue1));
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  display: flex; justify-content: space-between; align-items: center;
+  color: white;
+  box-shadow: 0 4px 16px rgba(43,107,94,0.25);
+}
+.sst-payable .lbl { font-size: 14px; font-weight: 600; opacity: 0.9; }
+.sst-payable .amt { font-size: 24px; font-weight: 700; font-family: 'DM Mono', monospace; }
+
+/* ── PERIOD PILLS ── */
+.period-row { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.period-btn {
+  padding: 6px 14px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--white); color: var(--muted);
+  transition: var(--transition);
+}
+.period-btn.active { background: var(--teal); color: white; border-color: var(--teal); box-shadow: 0 2px 8px rgba(43,107,94,0.2); }
+.period-btn:not(.active):hover { border-color: var(--teal-mid); color: var(--teal); }
+
+/* ── MODALS ── */
+.modal-bg {
+  position: fixed; inset: 0;
+  background: rgba(27,60,50,0.4);
+  backdrop-filter: blur(3px);
+  z-index: 100;
+  display: none; align-items: center; justify-content: center;
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: var(--white);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  width: 560px; max-height: 80vh; overflow-y: auto;
+  padding: 28px;
+  box-shadow: 0 20px 60px rgba(27,60,50,0.2);
+  animation: slideUp 0.22s cubic-bezier(0.34,1.56,0.64,1);
+}
+.modal-wide { width: 700px; }
+@keyframes slideUp { from { transform:translateY(24px); opacity:0 } to { transform:translateY(0); opacity:1 } }
+.modal-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 18px; color: var(--ink);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+/* ── ALERT ── */
+.alert {
+  padding: 12px 16px; border-radius: var(--radius-sm);
+  font-size: 12px; font-weight: 500;
+  margin-bottom: 16px;
+  display: flex; align-items: flex-start; gap: 8px;
+  line-height: 1.5;
+}
+.alert-teal { background: var(--teal-light); color: var(--teal-dark); border: 1px solid var(--teal-mid); }
+.alert-orange { background: var(--orange-light); color: var(--orange); border: 1px solid rgba(200,75,42,0.3); }
+
+/* ── PROFIT STAT ── */
+.profit-stat { text-align: center; padding: 10px 0; }
+.profit-stat .val { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 500; }
+.profit-stat .lbl { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; }
+
+/* ── AGING BARS ── */
+.aging-bar-wrap { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; }
+.aging-bar-track { height: 7px; background: var(--cream2); border-radius: 4px; overflow: hidden; }
+.aging-bar-fill { height: 100%; border-radius: 4px; }
+
+/* ── INVOICE LINE ITEMS ── */
+.line-items-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1.2fr 1.1fr 28px;
+  gap: 8px; align-items: center;
+}
+.line-header { color: var(--muted); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.line-row { padding: 7px 0; border-bottom: 1px solid var(--border); }
+.add-line-btn { color: var(--teal); font-size: 12px; font-weight: 600; cursor: pointer; padding: 9px 0; }
+.add-line-btn:hover { color: var(--orange); }
+
+.total-block { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; padding-top: 14px; }
+.total-row { display: flex; gap: 24px; font-size: 12px; }
+.t-lbl { color: var(--muted); width: 110px; text-align: right; font-weight: 600; }
+.t-val { font-family: 'DM Mono', monospace; width: 100px; text-align: right; font-weight: 600; color: var(--ink); }
+.total-row.grand { font-size: 15px; font-weight: 700; padding-top: 10px; border-top: 2px solid var(--teal); }
+.total-row.grand .t-val { color: var(--teal); }
+
+/* ── INVOICE / QUOTATION DETAIL VIEW ── */
+/* Shared doc-view header (breadcrumb bar + title bar) */
+.dv-breadcrumb { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.dv-breadcrumb a { color: var(--teal); cursor: pointer; }
+.dv-breadcrumb-sep { color: var(--border2); }
+.dv-title-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.dv-title-left { display: flex; align-items: center; gap: 10px; }
+.dv-back-arrow { color: var(--muted); font-size: 16px; cursor: pointer; line-height: 1; }
+.dv-back-arrow:hover { color: var(--teal); }
+.dv-title { font-size: 18px; font-weight: 700; color: var(--ink); }
+.dv-status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; }
+.dv-status-coming-due { color: #D97706; border: 1px solid #D97706; background: transparent; }
+.dv-status-overdue    { color: var(--red); border: 1px solid var(--red); background: var(--red-bg); }
+.dv-status-paid       { color: var(--green); border: 1px solid var(--green); background: var(--green-bg); }
+.dv-status-outstanding{ color: var(--amber); border: 1px solid var(--amber); background: var(--amber-bg); }
+.dv-title-right { display: flex; align-items: center; gap: 8px; }
+.dv-btn-actions { display: flex; align-items: center; gap: 5px; padding: 7px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--white); font-size: 12px; font-weight: 500; color: var(--ink3); cursor: pointer; }
+.dv-btn-actions svg { width: 13px; height: 13px; stroke-width: 1.8; }
+.dv-btn-print { display: flex; align-items: center; gap: 5px; padding: 7px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--white); font-size: 12px; font-weight: 500; color: var(--ink3); cursor: pointer; }
+.dv-btn-print svg { width: 13px; height: 13px; stroke-width: 1.8; }
+.dv-btn-share { display: flex; align-items: center; gap: 5px; padding: 7px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--white); font-size: 12px; font-weight: 500; color: var(--ink3); cursor: pointer; }
+.dv-btn-share svg { width: 13px; height: 13px; stroke-width: 1.8; }
+.dv-btn-add-payment { padding: 7px 16px; background: var(--teal); color: white; border: none; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.dv-btn-add-payment:hover { opacity: 0.9; }
+
+/* Invoice items table account column */
+.qv-items-table th, .qv-items-table td { padding: 8px 10px; font-size: 12px; }
+
+/* ── QUOTATION DETAIL VIEW ── */
+.qv-wrapper { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); }
+.qv-tab-bar {
+  display: flex; align-items: center; flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  position: sticky; top: -24px; background: var(--white); z-index: 5;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.qv-tab {
+  padding: 13px 14px 11px; font-size: 13px; font-weight: 500; color: var(--muted);
+  cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: var(--transition); white-space: nowrap;
+}
+.qv-tab:hover { color: var(--ink3); }
+.qv-tab.qv-active { color: var(--teal); border-bottom-color: var(--teal); font-weight: 600; }
+.qv-section {
+  display: grid; grid-template-columns: 190px 1fr; gap: 24px;
+  padding: 22px 24px; border-bottom: 1px solid var(--border);
+}
+.qv-section-full { padding: 20px 24px; border-bottom: 1px solid var(--border); }
+.qv-section-name { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.qv-section-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.qv-body { display: flex; flex-direction: column; gap: 13px; }
+.qv-row { display: grid; gap: 12px; }
+.qv-row-2 { grid-template-columns: 1fr 1fr; }
+.qv-row-3 { grid-template-columns: 1fr 1fr 80px; }
+.qv-field { display: flex; flex-direction: column; gap: 4px; }
+.qv-label { font-size: 11px; font-weight: 600; color: var(--ink3); display: flex; align-items: center; gap: 3px; }
+.qv-req { color: var(--red); }
+.qv-input {
+  padding: 7px 10px; font-size: 13px;
+  border: 1px solid var(--border); border-radius: 6px;
+  background: var(--white); color: var(--ink); font-family: inherit; outline: none;
+  transition: border-color 0.15s;
+}
+.qv-input:focus { border-color: var(--teal); box-shadow: 0 0 0 2px rgba(65,131,215,0.1); }
+.qv-input::placeholder { color: var(--muted2); }
+.qv-textarea { resize: vertical; min-height: 78px; }
+.qv-select { padding: 7px 10px; font-size: 13px; border: 1px solid var(--border); border-radius: 6px; background: var(--white); color: var(--ink); font-family: inherit; outline: none; cursor: pointer; width: 100%; }
+.qv-customer-wrap { display: flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.qv-customer-val { flex: 1; padding: 7px 10px; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.qv-warn-icon { color: #f59e0b; }
+.qv-customer-edit { padding: 6px 10px; border-left: 1px solid var(--border); background: var(--teal-faint); color: var(--teal); cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px; }
+.qv-date-wrap { display: flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.qv-date-input { flex: 1; padding: 7px 10px; font-size: 13px; border: none; outline: none; background: transparent; color: var(--ink); font-family: inherit; }
+.qv-date-icon { padding: 6px 10px; border-left: 1px solid var(--border); color: var(--muted); cursor: pointer; }
+.qv-checkbox-row { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink3); cursor: pointer; }
+.qv-checkbox-row input { accent-color: var(--teal); }
+/* Items */
+.qv-items-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.qv-items-title { font-size: 14px; font-weight: 700; color: var(--ink); }
+.qv-tax-toggle { display: flex; gap: 3px; }
+.qv-tax-btn { padding: 5px 12px; font-size: 12px; font-weight: 500; border-radius: 5px; cursor: pointer; border: 1px solid var(--border); background: var(--white); color: var(--muted); font-family: inherit; transition: var(--transition); }
+.qv-tax-btn.qv-tax-active { background: var(--teal); color: white; border-color: var(--teal); }
+.qv-items-tbl { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 12px; }
+.qv-items-tbl th { font-size: 11px; font-weight: 600; color: var(--muted); padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); background: var(--teal-faint); }
+.qv-items-tbl td { padding: 9px 10px; color: var(--ink2); border-bottom: 1px solid var(--border); vertical-align: top; }
+.qv-items-tbl input, .qv-items-tbl select { width: 100%; padding: 4px 7px; font-size: 12px; border: 1px solid var(--border); border-radius: 4px; background: var(--white); font-family: inherit; outline: none; }
+.qv-items-tbl input:focus, .qv-items-tbl select:focus { border-color: var(--teal); }
+.qv-row-num { width: 20px; font-size: 11px; color: var(--muted); padding-top: 11px !important; }
+.qv-item-desc-text { font-size: 12px; color: var(--ink); line-height: 1.55; min-width: 180px; }
+.qv-totals { margin-left: auto; width: 320px; margin-top: 8px; }
+.qv-total-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); }
+.qv-total-row:last-child { border-bottom: none; border-top: 2px solid var(--ink); padding-top: 10px; font-weight: 700; font-size: 14px; }
+.qv-total-label { font-size: 12px; color: var(--ink3); display: flex; align-items: center; gap: 6px; }
+.qv-total-rhs { font-family: 'DM Mono', monospace; font-size: 12px; display: flex; align-items: center; gap: 4px; }
+.qv-total-cur { color: var(--muted); font-size: 11px; }
+.qv-toggle-pill { width: 30px; height: 15px; background: var(--border2); border-radius: 20px; display: inline-block; cursor: pointer; }
+.qv-add-item-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: var(--radius-sm); border: 1px solid var(--teal); color: var(--teal); background: var(--white); font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.qv-add-item-btn:hover { background: var(--teal-light); }
+.qv-more-btn { padding: 5px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--white); color: var(--ink3); font-size: 12px; cursor: pointer; font-family: inherit; }
+/* Payment Terms */
+.qv-pt-tbl { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+.qv-pt-tbl th { font-size: 11px; font-weight: 600; color: var(--muted); padding: 8px 12px; text-align: left; border-bottom: 2px solid var(--border); }
+.qv-pt-tbl td { padding: 10px 12px; font-size: 13px; color: var(--ink2); border-bottom: 1px solid var(--border); }
+.qv-add-term-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 5px; border: 1px solid var(--border); background: var(--white); color: var(--ink3); font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; }
+/* Attachments */
+.qv-dropzone { border: 2px dashed var(--border2); border-radius: var(--radius); padding: 28px 20px; text-align: center; cursor: pointer; transition: var(--transition); }
+.qv-dropzone:hover { border-color: var(--teal); background: var(--teal-faint); }
+.qv-dropzone-icon { font-size: 28px; color: var(--muted2); margin-bottom: 8px; }
+.qv-dropzone-text { font-size: 12px; color: var(--muted); line-height: 1.7; }
+.qv-dropzone-link { color: var(--teal); font-weight: 500; }
+/* History */
+.qv-hist-tbl { width: 100%; border-collapse: collapse; }
+.qv-hist-tbl th { font-size: 11px; font-weight: 700; color: var(--muted); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+.qv-hist-tbl td { padding: 10px 12px; font-size: 12px; color: var(--ink2); border-bottom: 1px solid var(--border); }
+.qv-hist-tbl tr:last-child td { border-bottom: none; }
+.qv-channel-pill { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--white); font-size: 11px; color: var(--ink3); }
+.qv-ch-icon { color: var(--teal); }
+.qv-eye-btn { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 13px; }
+.qv-eye-btn:hover { color: var(--teal); }
+/* Bottom bar */
+.qv-bottom-bar { position: sticky; bottom: 0; margin: 0 -28px -24px; background: var(--white); border-top: 1px solid var(--border); padding: 11px 28px; display: flex; align-items: center; justify-content: space-between; z-index: 10; }
+.qv-qs-wrap { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink3); }
+.qv-qs-label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.qv-qs-label input { accent-color: var(--teal); }
+.qv-doc-btn { width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 6px; background: var(--white); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.qv-save-btn { padding: 8px 22px; background: var(--teal); color: white; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.qv-save-btn:hover { opacity: 0.9; }
+
+/* ── BUKKU TABS (invoice / list page tab strip) ── */
+.bukku-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
+.bukku-tab {
+  padding: 8px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+  cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px;
+  display: flex; align-items: center; gap: 5px; white-space: nowrap;
+}
+.bukku-tab:hover { color: var(--ink3); }
+.bukku-tab-active { color: var(--teal); border-bottom-color: var(--teal); font-weight: 600; }
+.bukku-tab-count { background: var(--cream2); color: var(--ink3); border-radius: 10px; padding: 1px 6px; font-size: 10px; font-weight: 600; }
+.bukku-tab-active .bukku-tab-count { background: var(--teal-light); color: var(--teal); }
+
+/* ── BUKKU PAGE HEADER (Quotations / list pages) ── */
+.bk-page-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 20px;
+}
+.bk-breadcrumb {
+  font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px;
+  margin-bottom: 4px; font-weight: 500;
+}
+.bk-breadcrumb-sep { color: var(--border2); }
+.bk-page-title { font-size: 22px; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 10px; }
+.bk-page-desc { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.bk-header-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+.btn-new-primary {
+  background: var(--teal); color: white; border: none;
+  padding: 8px 16px; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 6px;
+  box-shadow: 0 2px 8px rgba(65,131,215,0.3);
+  transition: var(--transition);
+}
+.btn-new-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-new-more {
+  background: var(--teal); color: white; border: none; border-left: 1px solid rgba(255,255,255,0.25);
+  padding: 8px 10px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13px; cursor: pointer; font-family: inherit;
+}
+.btn-new-wrap { display: flex; border-radius: var(--radius-sm); overflow: hidden; box-shadow: 0 2px 8px rgba(65,131,215,0.3); }
+.btn-new-wrap .btn-new-primary { border-radius: 0; }
+
+/* Filter bar */
+.filter-bar { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 8px; flex-wrap: wrap; }
+.filter-field { display: flex; flex-direction: column; gap: 4px; }
+.filter-label { font-size: 11px; font-weight: 600; color: var(--ink3); }
+.filter-date-wrap { display: flex; align-items: center; gap: 4px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 8px; }
+.filter-date-input {
+  width: 100px; padding: 7px 4px; font-size: 12px; border: none; outline: none;
+  background: transparent; color: var(--ink); font-family: inherit;
+}
+.date-arrow { color: var(--muted); font-size: 12px; }
+.filter-date-icon { color: var(--muted); font-size: 13px; cursor: pointer; }
+.filter-date-icon svg { width: 14px; height: 14px; stroke-width: 1.8; }
+.filter-search-wrap { position: relative; }
+.filter-search-input {
+  width: 180px; padding: 7px 10px; font-size: 12px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--white); color: var(--ink); font-family: inherit; outline: none;
+}
+.filter-search-input:focus { border-color: var(--teal); }
+.filter-customer-select {
+  padding: 7px 10px; font-size: 12px; min-width: 90px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--white); color: var(--ink); font-family: inherit; cursor: pointer; outline: none;
+}
+.filter-icon-btn {
+  width: 32px; height: 32px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--white); color: var(--ink3); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 14px; transition: var(--transition);
+}
+.filter-icon-btn:hover { background: var(--teal-faint); border-color: var(--teal); color: var(--teal); }
+.more-filters-link { font-size: 12px; color: var(--teal); font-weight: 500; cursor: pointer; margin-bottom: 12px; display: inline-flex; align-items: center; gap: 3px; }
+.more-filters-link:hover { text-decoration: underline; }
+
+/* List toolbar (action icons + pagination) */
+.list-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.list-actions { display: flex; gap: 4px; }
+.list-action-btn {
+  width: 30px; height: 30px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--white); color: var(--ink3); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 13px; transition: var(--transition);
+}
+.list-action-btn:hover { background: var(--teal-faint); border-color: var(--teal); color: var(--teal); }
+.pagination { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.pag-info { font-weight: 500; white-space: nowrap; }
+.pag-btns { display: flex; align-items: center; gap: 2px; }
+.pag-btn {
+  min-width: 28px; height: 28px; padding: 0 7px;
+  border: 1px solid var(--border); border-radius: 5px; background: var(--white);
+  color: var(--ink3); cursor: pointer; font-size: 12px; font-weight: 500; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; transition: var(--transition);
+}
+.pag-btn.pag-active { background: var(--teal); color: white; border-color: var(--teal); }
+.pag-btn:not(.pag-active):hover { border-color: var(--teal); color: var(--teal); }
+.pag-size-select { border: 1px solid var(--border); border-radius: 5px; padding: 3px 8px; font-size: 12px; font-family: inherit; background: var(--white); color: var(--ink3); outline: none; }
+.pag-grid-btn { width: 28px; height: 28px; border: 1px solid var(--border); border-radius: 5px; background: var(--white); color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.sort-icon { font-size: 9px; color: var(--muted2); margin-left: 2px; }
+.tbl th.sortable { cursor: pointer; user-select: none; }
+.tbl th.sortable:hover { color: var(--ink); }
+
+/* Badge - Ready (green outline Bukku style) */
+.badge-ready {
+  display: inline-flex; padding: 2px 9px; border-radius: 4px;
+  font-size: 11px; font-weight: 600; color: #16a34a;
+  border: 1px solid #22c55e; background: white; white-space: nowrap;
+}
+
+/* Customer link (cyan, Bukku style) */
+.cust-link { color: var(--orange); text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 3px; cursor: pointer; }
+.cust-link:hover { text-decoration: underline; }
+.ext-icon { font-size: 9px; opacity: 0.65; }
+
+/* Row inline icon buttons */
+.row-icons { display: flex; align-items: center; gap: 1px; }
+.row-icon-btn {
+  width: 24px; height: 24px; border: none; background: transparent; border-radius: 4px;
+  cursor: pointer; color: var(--muted); font-size: 12px;
+  display: flex; align-items: center; justify-content: center; transition: var(--transition);
+}
+.row-icon-btn:hover { background: var(--teal-faint); color: var(--teal); }
+.row-icon-btn.has-action { color: var(--teal); }
+
+/* Table action buttons */
+.btn-tbl-view {
+  padding: 4px 12px; font-size: 12px; font-weight: 500;
+  border: 1px solid var(--border); border-radius: 5px 0 0 5px;
+  background: var(--white); color: var(--ink3); cursor: pointer; font-family: inherit; transition: var(--transition);
+}
+.btn-tbl-view:hover { border-color: var(--teal); color: var(--teal); }
+.btn-tbl-more {
+  padding: 4px 8px; font-size: 12px;
+  border: 1px solid var(--border); border-left: none; border-radius: 0 5px 5px 0;
+  background: var(--white); color: var(--ink3); cursor: pointer; font-family: inherit;
+}
+.btn-tbl-more:hover { background: var(--teal-faint); }
+
+/* Nav expandable + sub-items */
+.nav-expandable {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 10px; border-radius: var(--radius-sm);
+  cursor: pointer; color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 500;
+  transition: var(--transition); user-select: none;
+}
+.nav-expandable:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+.nav-expandable.nav-open { color: rgba(255,255,255,0.9); }
+.nav-expand-left { display: flex; align-items: center; gap: 9px; }
+.nav-chevron { font-size: 9px; color: rgba(255,255,255,0.4); transition: transform 0.18s; }
+.nav-expandable.nav-open .nav-chevron { transform: rotate(180deg); color: rgba(255,255,255,0.7); }
+.nav-sub-list { display: none; }
+.nav-sub-list.nav-open { display: block; }
+.nav-sub-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px 10px 7px 32px;
+  border-radius: var(--radius-sm); cursor: pointer;
+  color: rgba(255,255,255,0.55); font-size: 12px; font-weight: 500;
+  transition: var(--transition); position: relative;
+}
+.nav-sub-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+.nav-sub-item.active {
+  background: rgba(255,255,255,0.12); color: #FFFFFF; font-weight: 600;
+}
+.nav-sub-item.active::before {
+  content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 18px; background: var(--orange); border-radius: 0 2px 2px 0;
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted2); }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+
+/* Company switch modal items */
+.co-item {
+  background: var(--teal-faint);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: 10px;
+}
+.co-item.selected { border-color: var(--teal); background: var(--teal-light); }
+.co-item:hover:not(.selected) { border-color: var(--teal-mid); }
+.co-item-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+.co-item-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.co-add {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px; text-align: center;
+  cursor: pointer; color: var(--muted);
+  font-size: 13px; font-weight: 600;
+  transition: var(--transition);
+}
+.co-add:hover { border-color: var(--teal-mid); color: var(--teal); }
+
+/* P&L section */
+.pl-section-head { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.9px; margin-bottom: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.pl-row { display: flex; justify-content: space-between; padding: 7px 0; font-size: 13px; border-bottom: 1px solid var(--border); }
+.pl-row:last-child { border-bottom: none; }
+.pl-total { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14px; font-weight: 700; border-top: 2px solid var(--teal); }
+.pl-grand { background: linear-gradient(135deg, var(--card-blue2), var(--card-blue1)); color: white; border-radius: var(--radius-sm); padding: 14px 18px; display: flex; justify-content: space-between; margin-top: 14px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="logo-area">
+    <div class="logo">
+      <!-- Spokesweb globe icon (SVG inline) -->
+      <div class="logo-icon">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+          <circle cx="20" cy="20" r="18" fill="#4183D7"/>
+          <!-- Globe lines -->
+          <ellipse cx="20" cy="20" rx="9" ry="18" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" fill="none"/>
+          <line x1="2" y1="20" x2="38" y2="20" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+          <path d="M5 13 Q20 9 35 13" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" fill="none"/>
+          <path d="M5 27 Q20 31 35 27" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" fill="none"/>
+          <circle cx="20" cy="20" r="18" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none"/>
+          <!-- Cyan accent arc -->
+          <path d="M 28 8 A 15 15 0 0 1 38 20" stroke="#1DBED8" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="logo-text-wrap">
+        <div class="logo-name">Spokesweb</div>
+        <div class="logo-sub">Accounting · Malaysia</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="company-pill" onclick="openModal('coModal')">
+    <div>
+      <div class="company-pill-name">BETA Social Sdn Bhd</div>
+      <div class="company-pill-sub">SST Registered · FY2025</div>
+    </div>
+    <div class="company-pill-arrow">⌄</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-item active" onclick="nav('dashboard',this)">
+      <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span> Dashboard
+    </div>
+    <div class="nav-item" onclick="nav('financing',this)">
+      <span class="nav-icon"><i data-lucide="wallet"></i></span> Financing Portal
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <!-- Sales expandable -->
+    <div class="nav-expandable nav-open" onclick="toggleNav(this)">
+      <div class="nav-expand-left"><span class="nav-icon"><i data-lucide="receipt"></i></span> Sales</div>
+      <span class="nav-chevron">▾</span>
+    </div>
+    <div class="nav-sub-list nav-open">
+      <div class="nav-sub-item active" onclick="navSub('quotations',this)">Quotations</div>
+      <div class="nav-sub-item" onclick="navSub('saleorders',this)">Sale Orders</div>
+      <div class="nav-sub-item" onclick="navSub('deliveryorders',this)">Delivery Orders</div>
+      <div class="nav-sub-item" onclick="nav('invoices',this)">Invoices <span class="nav-badge" style="margin-left:auto">3</span></div>
+      <div class="nav-sub-item" onclick="navSub('creditnotes',this)">Credit Notes</div>
+      <div class="nav-sub-item" onclick="navSub('payments',this)">Payments</div>
+      <div class="nav-sub-item" onclick="navSub('refunds',this)">Refunds</div>
+    </div>
+
+    <!-- Purchases expandable -->
+    <div class="nav-expandable" onclick="toggleNav(this)">
+      <div class="nav-expand-left"><span class="nav-icon"><i data-lucide="shopping-cart"></i></span> Purchases</div>
+      <span class="nav-chevron">▾</span>
+    </div>
+    <div class="nav-sub-list">
+      <div class="nav-sub-item" onclick="nav('expenses',this)">Bills &amp; Expenses</div>
+      <div class="nav-sub-item" onclick="nav('suppliers',this)">Suppliers</div>
+    </div>
+
+    <div class="nav-item" onclick="nav('shoebox',this)">
+      <span class="nav-icon"><i data-lucide="archive"></i></span> Digital Shoebox
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <!-- Bank expandable -->
+    <div class="nav-expandable" onclick="toggleNav(this)">
+      <div class="nav-expand-left"><span class="nav-icon"><i data-lucide="landmark"></i></span> Bank</div>
+      <span class="nav-chevron">▾</span>
+    </div>
+    <div class="nav-sub-list">
+      <div class="nav-sub-item" onclick="nav('transactions',this)">Transactions</div>
+    </div>
+
+    <div class="nav-item" onclick="nav('customers',this)">
+      <span class="nav-icon"><i data-lucide="users"></i></span> Contacts
+    </div>
+    <div class="nav-item" onclick="navSub('products',this)">
+      <span class="nav-icon"><i data-lucide="package"></i></span> Products &amp; Services
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <!-- Stock expandable -->
+    <div class="nav-expandable" onclick="toggleNav(this)">
+      <div class="nav-expand-left"><span class="nav-icon"><i data-lucide="layers"></i></span> Stock</div>
+      <span class="nav-chevron">▾</span>
+    </div>
+    <div class="nav-sub-list"></div>
+
+    <!-- Reports expandable -->
+    <div class="nav-expandable" onclick="toggleNav(this)">
+      <div class="nav-expand-left"><span class="nav-icon"><i data-lucide="bar-chart-2"></i></span> Reports</div>
+      <span class="nav-chevron">▾</span>
+    </div>
+    <div class="nav-sub-list">
+      <div class="nav-sub-item" onclick="nav('reports',this)">Financial Reports</div>
+    </div>
+
+    <!-- Accounting expandable -->
+    <div class="nav-expandable" onclick="toggleNav(this)">
+      <div class="nav-expand-left"><span class="nav-icon"><i data-lucide="book-open"></i></span> Accounting</div>
+      <span class="nav-chevron">▾</span>
+    </div>
+    <div class="nav-sub-list">
+      <div class="nav-sub-item" onclick="nav('coa',this)">Chart of Accounts</div>
+      <div class="nav-sub-item" onclick="nav('journal',this)">Journal Entries</div>
+      <div class="nav-sub-item" onclick="nav('sst',this)">SST Return</div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="nav-expandable nav-open" onclick="toggleNav(this)">
+      <div class="nav-expand-left"><span class="nav-icon"><i data-lucide="settings"></i></span> Control Panel</div>
+      <span class="nav-chevron">▾</span>
+    </div>
+    <div class="nav-sub-list nav-open">
+      <div class="nav-sub-item" onclick="navSub('tax',this)">Tax Rates</div>
+      <div class="nav-sub-item" onclick="navSub('settings',this)">General Settings</div>
+    </div>
+
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-row">
+      <div class="user-avatar">ES</div>
+      <div>
+        <div class="user-name">Eric Soh</div>
+        <div class="user-role">Administrator</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title" id="pgTitle">Dashboard</div>
+      <div class="page-sub" id="pgSub">Financial Year 2025 &nbsp;·&nbsp; Ringgit Malaysia (MYR)</div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost btn-sm" onclick="openModal('newInvModal')">+ New Invoice</button>
+      <button class="btn btn-primary btn-sm" onclick="openModal('newTxModal')">+ Add Transaction</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ════ DASHBOARD ════ -->
+    <div class="page active" id="pg-dashboard">
+      <div class="kpi-grid">
+        <div class="kpi-card kpi-teal">
+          <div class="kpi-icon-bg"><i data-lucide="trending-up"></i></div>
+          <div class="kpi-label">Revenue (YTD)</div>
+          <div class="kpi-value"><span class="myr">RM</span>487,320</div>
+          <div class="kpi-change up">↑ 18.4% vs last year</div>
+        </div>
+        <div class="kpi-card kpi-orange">
+          <div class="kpi-icon-bg"><i data-lucide="inbox"></i></div>
+          <div class="kpi-label">Accounts Receivable</div>
+          <div class="kpi-value"><span class="myr">RM</span>62,480</div>
+          <div class="kpi-change neutral">4 invoices pending</div>
+        </div>
+        <div class="kpi-card kpi-green">
+          <div class="kpi-icon-bg"><i data-lucide="landmark"></i></div>
+          <div class="kpi-label">Cash & Bank</div>
+          <div class="kpi-value"><span class="myr">RM</span>214,900</div>
+          <div class="kpi-change up">↑ 3 accounts</div>
+        </div>
+        <div class="kpi-card kpi-amber">
+          <div class="kpi-icon-bg"><i data-lucide="send"></i></div>
+          <div class="kpi-label">Accounts Payable</div>
+          <div class="kpi-value"><span class="myr">RM</span>28,150</div>
+          <div class="kpi-change down">↓ 2 bills overdue</div>
+        </div>
+      </div>
+
+      <div class="qa-row">
+        <div class="qa" onclick="openModal('newInvModal')"><i data-lucide="file-plus"></i> Create Invoice</div>
+        <div class="qa" onclick="openModal('newExpModal')"><i data-lucide="credit-card"></i> Record Expense</div>
+        <div class="qa" onclick="nav('sst',null)"><i data-lucide="file-check"></i> SST Return</div>
+        <div class="qa" onclick="nav('reports',null)"><i data-lucide="bar-chart"></i> P&amp;L Report</div>
+        <div class="qa"><i data-lucide="landmark"></i> Bank Reconciliation</div>
+        <div class="qa"><i data-lucide="mail"></i> Send Statements</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">Revenue vs Expenses</div><div class="card-sub">Monthly · 2025</div></div>
+            <div style="display:flex;gap:14px;font-size:11px;font-weight:600;">
+              <span style="display:flex;align-items:center;gap:5px;color:var(--muted)"><span style="width:10px;height:10px;background:var(--teal);border-radius:2px;display:inline-block"></span>Revenue</span>
+              <span style="display:flex;align-items:center;gap:5px;color:var(--muted)"><span style="width:10px;height:10px;background:var(--cream2);border:1px solid var(--border2);border-radius:2px;display:inline-block"></span>Expense</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="bar-chart-wrap" id="barChart"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">SST Summary <span class="sst-pill">6%</span></div><div class="card-sub">Current filing period</div></div>
+            <button class="btn btn-ghost btn-sm" onclick="nav('sst',null)">View Return</button>
+          </div>
+          <div class="card-body">
+            <div class="sst-row"><span>Output Tax (Sales)</span><span class="mono" style="color:var(--green);font-weight:700">RM 18,420.00</span></div>
+            <div class="sst-row"><span>Input Tax (Purchases)</span><span class="mono" style="color:var(--red)">RM 9,210.00</span></div>
+            <div style="height:12px"></div>
+            <div class="sst-payable">
+              <div class="lbl">Net SST Payable</div>
+              <div class="amt">RM 9,210.00</div>
+            </div>
+            <div style="margin-top:12px;font-size:11px;color:var(--muted)">Filing due: <strong style="color:var(--orange)">28 July 2025</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Cash Flow (Jun)</div></div>
+          <div class="card-body">
+            <div style="display:flex;justify-content:space-around;padding:6px 0;">
+              <div class="profit-stat"><div class="val" style="color:var(--green)">+RM 38,400</div><div class="lbl">Inflows</div></div>
+              <div style="width:1px;background:var(--border)"></div>
+              <div class="profit-stat"><div class="val" style="color:var(--red)">−RM 22,100</div><div class="lbl">Outflows</div></div>
+            </div>
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);text-align:center;">
+              <div class="val" style="font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--teal)">RM 16,300</div>
+              <div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-top:4px">Net Cash Flow</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">Top Expenses</div></div>
+          <div class="card-body">
+            <div class="donut-wrap">
+              <svg viewBox="0 0 70 70" width="80" height="80" style="flex-shrink:0;transform:rotate(-90deg)">
+                <circle cx="35" cy="35" r="28" fill="none" stroke="var(--cream2)" stroke-width="7"/>
+                <circle cx="35" cy="35" r="28" fill="none" stroke="var(--teal)" stroke-width="7" stroke-dasharray="70 106" stroke-dashoffset="0"/>
+                <circle cx="35" cy="35" r="28" fill="none" stroke="var(--orange)" stroke-width="7" stroke-dasharray="41 135" stroke-dashoffset="-70"/>
+                <circle cx="35" cy="35" r="28" fill="none" stroke="var(--green)" stroke-width="7" stroke-dasharray="29 147" stroke-dashoffset="-111"/>
+                <circle cx="35" cy="35" r="28" fill="none" stroke="var(--amber)" stroke-width="7" stroke-dasharray="36 140" stroke-dashoffset="-140"/>
+              </svg>
+              <div class="legend">
+                <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div><div class="legend-name">Salaries</div><div class="legend-pct">40%</div></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div><div class="legend-name">Rent</div><div class="legend-pct">23%</div></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div><div class="legend-name">Utilities</div><div class="legend-pct">17%</div></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div><div class="legend-name">Others</div><div class="legend-pct">20%</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">Receivables Aging</div></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
+            <div>
+              <div class="aging-bar-wrap"><span style="color:var(--green);font-weight:600;font-size:11px">0–30 days</span><span class="mono" style="font-size:11px">RM 38,000</span></div>
+              <div class="aging-bar-track"><div class="aging-bar-fill" style="width:61%;background:var(--green)"></div></div>
+            </div>
+            <div>
+              <div class="aging-bar-wrap"><span style="color:var(--amber);font-weight:600;font-size:11px">31–60 days</span><span class="mono" style="font-size:11px">RM 14,200</span></div>
+              <div class="aging-bar-track"><div class="aging-bar-fill" style="width:23%;background:var(--amber)"></div></div>
+            </div>
+            <div>
+              <div class="aging-bar-wrap"><span style="color:var(--orange);font-weight:600;font-size:11px">61–90 days</span><span class="mono" style="font-size:11px">RM 7,480</span></div>
+              <div class="aging-bar-track"><div class="aging-bar-fill" style="width:12%;background:var(--orange)"></div></div>
+            </div>
+            <div>
+              <div class="aging-bar-wrap"><span style="color:var(--muted);font-weight:600;font-size:11px">90+ days</span><span class="mono" style="font-size:11px">RM 2,800</span></div>
+              <div class="aging-bar-track"><div class="aging-bar-fill" style="width:4%;background:var(--muted2)"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div><div class="card-title">Recent Transactions</div><div class="card-sub">Last 5 entries</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="nav('transactions',null)">View All</button>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Reference</th><th style="text-align:right">Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>03 Jul 2025</td><td>Invoice Payment – Kumkang Kind MY</td><td style="color:var(--muted)">Sales Revenue</td><td class="mono">INV-0087</td><td class="mono" style="text-align:right;color:var(--green);font-weight:600">+RM 28,000.00</td><td><span class="badge badge-paid">● Paid</span></td></tr>
+            <tr><td>02 Jul 2025</td><td>Office Rental – Menara KLCC</td><td style="color:var(--muted)">Rent</td><td class="mono">EXP-0142</td><td class="mono" style="text-align:right;color:var(--red)">−RM 4,500.00</td><td><span class="badge badge-paid">● Paid</span></td></tr>
+            <tr><td>01 Jul 2025</td><td>Invoice – Taghill Penang</td><td style="color:var(--muted)">Consulting</td><td class="mono">INV-0086</td><td class="mono" style="text-align:right;color:var(--amber)">RM 15,000.00</td><td><span class="badge badge-pending">● Pending</span></td></tr>
+            <tr><td>30 Jun 2025</td><td>Telekom Malaysia</td><td style="color:var(--muted)">Utilities</td><td class="mono">EXP-0141</td><td class="mono" style="text-align:right;color:var(--red)">−RM 280.00</td><td><span class="badge badge-paid">● Paid</span></td></tr>
+            <tr><td>28 Jun 2025</td><td>EPF Contribution (June)</td><td style="color:var(--muted)">Statutory</td><td class="mono">EPF-0612</td><td class="mono" style="text-align:right;color:var(--red)">−RM 8,400.00</td><td><span class="badge badge-paid">● Paid</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ QUOTATION DETAIL VIEW ════ -->
+    <div class="page" id="pg-quotation-view">
+      <div class="qv-wrapper">
+
+        <!-- Back nav -->
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 20px 0;font-size:12px;color:var(--muted)">
+          <span style="cursor:pointer;color:var(--teal);font-weight:500" onclick="navSub('quotations',null)">← Quotations</span>
+        </div>
+
+        <!-- Tab bar -->
+        <div class="qv-tab-bar" id="qvTabBar">
+          <div class="qv-tab qv-active" onclick="qvTab(this,'qv-billing')">Billing &amp; Shipping</div>
+          <div class="qv-tab" onclick="qvTab(this,'qv-general')">General Info</div>
+          <div class="qv-tab" onclick="qvTab(this,'qv-items')">Items</div>
+          <div class="qv-tab" onclick="qvTab(this,'qv-payment')">Payment Terms</div>
+          <div class="qv-tab" onclick="qvTab(this,'qv-additional')">Additional Info</div>
+          <div class="qv-tab" onclick="qvTab(this,'qv-attachments')">Attachments</div>
+          <div class="qv-tab" onclick="qvTab(this,'qv-controls')">Controls</div>
+          <div class="qv-tab" onclick="qvTab(this,'qv-history')">History</div>
+        </div>
+
+        <!-- Billing & Shipping -->
+        <div class="qv-section" id="qv-billing">
+          <div>
+            <div class="qv-section-name">Billing &amp; Shipping</div>
+            <div class="qv-section-desc">Billing &amp; shipping parties for the transaction.</div>
+          </div>
+          <div class="qv-body">
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label"><span class="qv-req">*</span> Customer</div>
+                <div class="qv-customer-wrap">
+                  <div class="qv-customer-val">Bank of China (Malaysia) Berhad <span class="qv-warn-icon"><i data-lucide="alert-circle"></i></span></div>
+                  <div class="qv-customer-edit"><i data-lucide="pencil"></i> ˅</div>
+                </div>
+              </div>
+              <div class="qv-field" style="justify-content:flex-end;padding-top:20px">
+                <label class="qv-checkbox-row"><input type="checkbox"> Show Shipping Info</label>
+              </div>
+            </div>
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label">Billing Attention</div>
+                <input class="qv-input" type="text" value="Teresa Lee">
+              </div>
+              <div class="qv-field">
+                <div class="qv-label">Shipping Attention</div>
+                <input class="qv-input" type="text" placeholder="">
+              </div>
+            </div>
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label">Billing Address ˅</div>
+                <textarea class="qv-input qv-textarea">2nd Floor, Plaza OSK,
+25, Jalan Ampang.
+50450 Kuala Lumpur, Wilayah Persekutuan</textarea>
+              </div>
+              <div class="qv-field">
+                <div class="qv-label">Shipping Address ˅</div>
+                <textarea class="qv-input qv-textarea"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- General Info -->
+        <div class="qv-section" id="qv-general">
+          <div>
+            <div class="qv-section-name">General Info</div>
+            <div class="qv-section-desc">General information such as number, date and more for the transaction.</div>
+          </div>
+          <div class="qv-body">
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label"><span class="qv-req">*</span> No.</div>
+                <input class="qv-input" type="text" value="BSQ-0274">
+              </div>
+              <div class="qv-field">
+                <div class="qv-label">Reference No.</div>
+                <input class="qv-input" type="text" placeholder="">
+              </div>
+            </div>
+            <div class="qv-row qv-row-3">
+              <div class="qv-field">
+                <div class="qv-label"><span class="qv-req">*</span> Date</div>
+                <div class="qv-date-wrap">
+                  <input class="qv-date-input" type="text" value="26/03/2026">
+                  <div class="qv-date-icon"><i data-lucide="calendar"></i></div>
+                </div>
+              </div>
+              <div class="qv-field">
+                <div class="qv-label"><span class="qv-req">*</span> Currency</div>
+                <select class="qv-select"><option>MYR - Malaysian ...</option><option>USD - US Dollar</option><option>SGD - Singapore Dollar</option></select>
+              </div>
+              <div class="qv-field">
+                <div class="qv-label">Rate</div>
+                <input class="qv-input" type="text" value="1">
+              </div>
+            </div>
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label">Description ⓘ</div>
+                <input class="qv-input" type="text" placeholder="">
+              </div>
+              <div class="qv-field">
+                <div class="qv-label">Internal Note ⓘ</div>
+                <input class="qv-input" type="text" placeholder="">
+              </div>
+            </div>
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label">Tags ⓘ</div>
+                <select class="qv-select"><option value="">Select Tags</option></select>
+              </div>
+              <div class="qv-field">
+                <div class="qv-label">Title ⓘ</div>
+                <input class="qv-input" type="text" value="25th Anniversary Logo Design">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Items -->
+        <div class="qv-section-full" id="qv-items">
+          <div class="qv-items-head">
+            <div class="qv-items-title">Items</div>
+            <div class="qv-tax-toggle">
+              <button class="qv-tax-btn" onclick="qvTaxToggle(this)">Tax Inclusive</button>
+              <button class="qv-tax-btn qv-tax-active" onclick="qvTaxToggle(this)">Tax Exclusive</button>
+            </div>
+          </div>
+          <table class="qv-items-tbl">
+            <colgroup><col style="width:22px"><col><col style="width:150px"><col style="width:80px"><col style="width:100px"><col style="width:100px"><col style="width:75px"><col style="width:55px"><col style="width:28px"></colgroup>
+            <thead>
+              <tr>
+                <th></th><th>Item</th><th>Account</th>
+                <th style="text-align:right">Quantity</th><th style="text-align:right">Unit Price</th>
+                <th style="text-align:right">Amount</th><th style="text-align:right">Discount</th>
+                <th>Tax</th><th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="qv-row-num">1</td>
+                <td>
+                  <div class="qv-item-desc-text">1. Two (2) Options logo design concept<br>2. Up to two (3) rounds of revisions will be provided for the selected concept.<br>3. Upon final approval, the ...</div>
+                </td>
+                <td><div style="font-size:12px;color:var(--ink3)">5000 Sales Income</div></td>
+                <td><input type="text" value="1.00" style="text-align:right"></td>
+                <td><input type="text" value="2,000.00" style="text-align:right"></td>
+                <td style="text-align:right;font-family:'DM Mono',monospace">2,000.00</td>
+                <td><input type="text" value="0.00" style="text-align:right"></td>
+                <td><select><option>SV8</option></select></td>
+                <td><button style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;padding:0;display:flex;align-items:center"><i data-lucide="trash-2" style="width:14px;height:14px;stroke-width:1.8"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="display:flex;gap:7px;margin-bottom:20px">
+            <button class="qv-add-item-btn">+ Item</button>
+            <button class="qv-more-btn">···</button>
+          </div>
+          <div class="qv-totals">
+            <div class="qv-total-row">
+              <span class="qv-total-label">Sub Total</span>
+              <span class="qv-total-rhs"><span class="qv-total-cur">RM</span> 2,000.00</span>
+            </div>
+            <div class="qv-total-row">
+              <span class="qv-total-label">Discount Given</span>
+              <span class="qv-total-rhs"><span class="qv-total-cur">RM</span> 0.00</span>
+            </div>
+            <div class="qv-total-row">
+              <span class="qv-total-label">Service Tax (8%)</span>
+              <span class="qv-total-rhs"><span class="qv-total-cur">RM</span> 160.00</span>
+            </div>
+            <div class="qv-total-row">
+              <span class="qv-total-label">Rounding Adjustment <span class="qv-toggle-pill"></span></span>
+              <span class="qv-total-rhs"><span class="qv-total-cur">RM</span> <span style="color:var(--muted)">0.00</span></span>
+            </div>
+            <div class="qv-total-row">
+              <span>TOTAL</span>
+              <span class="qv-total-rhs"><span class="qv-total-cur">RM</span> 2,160.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Terms -->
+        <div class="qv-section" id="qv-payment">
+          <div>
+            <div class="qv-section-name">Payment Terms</div>
+          </div>
+          <div>
+            <table class="qv-pt-tbl">
+              <thead><tr><th>Term</th><th>Due On</th><th style="text-align:right">Amount</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>-</td><td>-</td>
+                  <td style="text-align:right;font-family:'DM Mono',monospace">2,160.00</td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="display:flex;justify-content:flex-end">
+              <button class="qv-add-term-btn">+ Term</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="qv-section" id="qv-additional">
+          <div>
+            <div class="qv-section-name">Additional Info</div>
+            <div class="qv-section-desc">Additional information such as remarks and country specific fields.</div>
+          </div>
+          <div class="qv-body">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div class="qv-label">Remarks (<span style="color:var(--teal);cursor:pointer;font-weight:500">Styling Guide</span>)</div>
+              <button class="qv-add-term-btn">Placeholders ˅</button>
+            </div>
+            <textarea class="qv-input qv-textarea" style="min-height:130px">Terms &amp; Conditions
+1. Cost quoted is based on fixed and non-reconcilable pricing.
+2. This quotation is valid for 15 days only.
+3. Payment method:
+- 50% deposit to commence work, with the remaining 50% payable upon completion.
+4. Any additional scope of work, which is not quoted, will be charged based on our rate card.
+
+Payment to be made to:</textarea>
+          </div>
+        </div>
+
+        <!-- Attachments -->
+        <div class="qv-section" id="qv-attachments">
+          <div>
+            <div class="qv-section-name">Attachments</div>
+            <div class="qv-section-desc">Supporting documents attached to the transaction.</div>
+          </div>
+          <div>
+            <div class="qv-dropzone">
+              <div class="qv-dropzone-icon"><i data-lucide="upload-cloud" style="width:32px;height:32px;stroke-width:1.5"></i></div>
+              <div class="qv-dropzone-text">Drop files to upload<br>or select files from <span class="qv-dropzone-link">File Manager</span>.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="qv-section" id="qv-controls">
+          <div>
+            <div class="qv-section-name">Controls</div>
+            <div class="qv-section-desc">Controls and statuses for the transaction.</div>
+          </div>
+          <div class="qv-body">
+            <div class="qv-field" style="max-width:220px">
+              <div class="qv-label">Status</div>
+              <input class="qv-input" type="text" value="Ready">
+            </div>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div class="qv-section-full" id="qv-history">
+          <div style="margin-bottom:12px">
+            <div class="qv-section-name">History</div>
+            <div class="qv-section-desc">Action history performed on the transaction.</div>
+          </div>
+          <table class="qv-hist-tbl">
+            <thead><tr><th>Date</th><th>User</th><th>Channel</th><th>Action</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td style="color:var(--muted)">26/03/2026 2:36 am</td><td>Eric</td>
+                <td><span class="qv-channel-pill"><span class="qv-ch-icon"><i data-lucide="file-text"></i></span> Transaction</span></td>
+                <td>Updated</td><td style="text-align:right"><button class="qv-eye-btn"><i data-lucide="eye"></i></button></td>
+              </tr>
+              <tr>
+                <td style="color:var(--muted)">26/03/2026 2:34 am</td><td>Eric</td>
+                <td><span class="qv-channel-pill"><span class="qv-ch-icon"><i data-lucide="file-text"></i></span> Transaction</span></td>
+                <td>Updated</td><td style="text-align:right"><button class="qv-eye-btn"><i data-lucide="eye"></i></button></td>
+              </tr>
+              <tr>
+                <td style="color:var(--muted)">26/03/2026 2:17 am</td><td>Eric</td>
+                <td><span class="qv-channel-pill"><span class="qv-ch-icon"><i data-lucide="file-text"></i></span> Transaction</span></td>
+                <td>Created as Ready</td><td style="text-align:right"><button class="qv-eye-btn"><i data-lucide="eye"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- /qv-wrapper -->
+
+      <!-- Sticky bottom action bar -->
+      <div class="qv-bottom-bar">
+        <div class="qv-qs-wrap">
+          <label class="qv-qs-label"><input type="checkbox" checked> QuickShare via Email</label>
+          <button class="qv-doc-btn"><i data-lucide="file-text"></i></button>
+        </div>
+        <div>
+          <button class="qv-save-btn">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ INVOICE DETAIL VIEW ════ -->
+    <div class="page" id="pg-invoice-view">
+      <!-- Breadcrumb + title bar -->
+      <div style="margin-bottom:4px">
+        <div class="dv-breadcrumb">
+          <span>Home</span><span class="dv-breadcrumb-sep">/</span>
+          <a onclick="navSub('invoices',null)">Sales</a><span class="dv-breadcrumb-sep">/</span>
+          <span style="color:var(--ink)">View Invoice</span>
+        </div>
+        <div class="dv-title-bar">
+          <div class="dv-title-left">
+            <span class="dv-back-arrow" onclick="navSub('invoices',null)">←</span>
+            <span class="dv-title">View Invoice</span>
+            <span class="dv-status-badge dv-status-coming-due" id="invStatusBadge">Coming Due <span style="font-size:9px;opacity:0.7">˅</span></span>
+          </div>
+          <div class="dv-title-right">
+            <button class="dv-btn-actions"><i data-lucide="chevron-down"></i> Actions</button>
+            <button class="dv-btn-print"><i data-lucide="printer"></i> Print / PDF</button>
+            <button class="dv-btn-share"><i data-lucide="share-2"></i> QuickShare…</button>
+            <button class="dv-btn-add-payment">Add Payment</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="qv-wrapper">
+        <!-- Tab bar -->
+        <div class="qv-tab-bar">
+          <div class="qv-tab qv-active" onclick="qvTab(this,'inv-billing')">Billing &amp; Shipping</div>
+          <div class="qv-tab" onclick="qvTab(this,'inv-general')">General Info</div>
+          <div class="qv-tab" onclick="qvTab(this,'inv-items')">Items</div>
+          <div class="qv-tab" onclick="qvTab(this,'inv-payment-terms')">Payment Terms</div>
+          <div class="qv-tab" onclick="qvTab(this,'inv-additional')">Additional Info</div>
+          <div class="qv-tab" onclick="qvTab(this,'inv-attachments')">Attachments</div>
+          <div class="qv-tab" onclick="qvTab(this,'inv-controls')">Controls</div>
+          <div class="qv-tab" onclick="qvTab(this,'inv-history')">History</div>
+        </div>
+
+        <!-- Billing & Shipping -->
+        <div class="qv-section" id="inv-billing">
+          <div>
+            <div class="qv-section-name">Billing &amp; Shipping</div>
+            <div class="qv-section-desc">Billing &amp; shipping parties for the transaction.</div>
+          </div>
+          <div class="qv-body">
+            <!-- Payment Mode -->
+            <div class="qv-row" style="margin-bottom:14px">
+              <div class="qv-field">
+                <div class="qv-label"><span class="qv-req">*</span> Payment Mode</div>
+                <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;width:fit-content">
+                  <button style="padding:7px 16px;font-size:12px;font-weight:600;background:var(--teal);color:white;border:none;cursor:pointer;font-family:inherit">Credit Sales</button>
+                  <button style="padding:7px 16px;font-size:12px;font-weight:500;background:var(--white);color:var(--ink3);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">Cash Sales</button>
+                </div>
+              </div>
+            </div>
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label"><span class="qv-req">*</span> Customer</div>
+                <div class="qv-customer-wrap">
+                  <div class="qv-customer-val">Galderma Malaysia Sdn Bhd <span class="qv-warn-icon"><i data-lucide="alert-circle"></i></span></div>
+                  <div class="qv-customer-edit"><i data-lucide="pencil"></i> ˅</div>
+                </div>
+              </div>
+              <div class="qv-field" style="justify-content:flex-end;padding-top:20px">
+                <label class="qv-checkbox-row"><input type="checkbox"> Show Shipping Info</label>
+              </div>
+            </div>
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label">Billing Attention</div>
+                <input class="qv-input" type="text" value="Kam Yee">
+              </div>
+              <div class="qv-field">
+                <div class="qv-label">Shipping Attention</div>
+                <input class="qv-input" type="text" placeholder="">
+              </div>
+            </div>
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label">Billing Address <span style="font-size:10px;color:var(--muted)">˅</span></div>
+                <textarea class="qv-textarea" rows="4">Unit 904, Level 9, Uptown One,
+Jalan SS21/58, Damansara Utama,
+47400 Petaling Jaya</textarea>
+              </div>
+              <div class="qv-field">
+                <div class="qv-label">Shipping Address <span style="font-size:10px;color:var(--muted)">˅</span></div>
+                <textarea class="qv-textarea" rows="4" placeholder=""></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- General Info -->
+        <div class="qv-section" id="inv-general">
+          <div>
+            <div class="qv-section-name">General Info</div>
+            <div class="qv-section-desc">General information such as number, date and more for the transaction.</div>
+          </div>
+          <div class="qv-body">
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label"><span class="qv-req">*</span> No.</div>
+                <input class="qv-input" type="text" value="INV-000376">
+              </div>
+              <div class="qv-field">
+                <div class="qv-label">Reference No.</div>
+                <input class="qv-input" type="text" value="#C161072">
+              </div>
+            </div>
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label"><span class="qv-req">*</span> Date</div>
+                <div class="qv-date-wrap">
+                  <input class="qv-date-input" type="text" value="25/03/2026">
+                  <div class="qv-date-icon"><i data-lucide="calendar"></i></div>
+                </div>
+              </div>
+              <div class="qv-field">
+                <div class="qv-label"><span class="qv-req">*</span> Currency &nbsp;<span style="font-weight:400;color:var(--muted);font-size:11px">Rate</span></div>
+                <div style="display:flex;gap:8px">
+                  <select class="qv-select" style="flex:2"><option>MYR – Malaysian Ringgit</option><option>USD – US Dollar</option><option>SGD – Singapore Dollar</option></select>
+                  <input class="qv-input" type="text" value="1" style="flex:1;max-width:60px">
+                </div>
+              </div>
+            </div>
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label">Description <span class="qv-info">ⓘ</span></div>
+                <input class="qv-input" type="text" placeholder="">
+              </div>
+              <div class="qv-field">
+                <div class="qv-label">Internal Note <span class="qv-info">ⓘ</span></div>
+                <input class="qv-input" type="text" placeholder="">
+              </div>
+            </div>
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label">Tags <span class="qv-info">ⓘ</span></div>
+                <select class="qv-select"><option value="">Select Tags</option></select>
+              </div>
+              <div class="qv-field">
+                <div class="qv-label">Title <span class="qv-info">ⓘ</span></div>
+                <input class="qv-input" type="text" value="Benzac Social Media Retainer (JAN to MAR 26)">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Items -->
+        <div class="qv-section" id="inv-items">
+          <div>
+            <div class="qv-section-name">Items</div>
+            <div class="qv-section-desc"></div>
+          </div>
+          <div class="qv-body" style="padding:0">
+            <!-- Tax toggle -->
+            <div style="display:flex;justify-content:flex-end;padding:12px 20px 0">
+              <div class="qv-tax-toggle">
+                <button class="qv-tax-btn" onclick="qvTaxToggle(this)">Tax Inclusive</button>
+                <button class="qv-tax-btn qv-tax-active" onclick="qvTaxToggle(this)">Tax Exclusive</button>
+              </div>
+            </div>
+            <!-- Items table -->
+            <div style="overflow-x:auto;margin-top:10px">
+              <table class="tbl qv-items-table" style="min-width:900px">
+                <thead>
+                  <tr>
+                    <th style="width:28px;text-align:center">#</th>
+                    <th>Item</th>
+                    <th style="width:140px">Account</th>
+                    <th style="width:90px;text-align:right">Quantity</th>
+                    <th style="width:100px;text-align:right">Unit Price</th>
+                    <th style="width:100px;text-align:right">Amount</th>
+                    <th style="width:80px;text-align:right">Discount</th>
+                    <th style="width:60px">Tax</th>
+                    <th style="width:34px"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="text-align:center;color:var(--muted)">1</td>
+                    <td>
+                      <div style="font-weight:600;margin-bottom:3px">Social Media Management</div>
+                      <div style="font-size:11px;color:var(--muted);line-height:1.5">Social Media Management<br>- Content calendar<br>- Planning and ideation<br>- Publishing and scheduling<br>- Growth Reporting &amp; Analytics<br>- Digital monitoring…</div>
+                    </td>
+                    <td style="font-size:11px;color:var(--ink3)">5000 Sales Income</td>
+                    <td style="text-align:right">3.00 unit</td>
+                    <td class="mono" style="text-align:right">1,000.00</td>
+                    <td class="mono" style="text-align:right;font-weight:600">3,000.00</td>
+                    <td class="mono" style="text-align:right">0.00</td>
+                    <td><select style="font-size:11px;border:1px solid var(--border);border-radius:4px;padding:2px 4px"><option>SV8</option></select></td>
+                    <td><button style="background:none;border:none;cursor:pointer;color:var(--muted);padding:0;display:flex;align-items:center"><i data-lucide="trash-2" style="width:14px;height:14px;stroke-width:1.8"></i></button></td>
+                  </tr>
+                  <tr>
+                    <td style="text-align:center;color:var(--muted)">2</td>
+                    <td>
+                      <div style="font-weight:600;margin-bottom:3px">Social Media Content Creation</div>
+                      <div style="font-size:11px;color:var(--muted);line-height:1.5">Social Media Content Creation<br>- Deliverables per month: 4 reels, mirrored IG TT ; 2 Carousel on IG<br>- Inclusive of video shooting, editing and copywriting…</div>
+                    </td>
+                    <td style="font-size:11px;color:var(--ink3)">5000 Sales Income</td>
+                    <td style="text-align:right">3.00 unit</td>
+                    <td class="mono" style="text-align:right">4,000.00</td>
+                    <td class="mono" style="text-align:right;font-weight:600">12,000.00</td>
+                    <td class="mono" style="text-align:right">0.00</td>
+                    <td><select style="font-size:11px;border:1px solid var(--border);border-radius:4px;padding:2px 4px"><option>SV8</option></select></td>
+                    <td><button style="background:none;border:none;cursor:pointer;color:var(--muted);padding:0;display:flex;align-items:center"><i data-lucide="trash-2" style="width:14px;height:14px;stroke-width:1.8"></i></button></td>
+                  </tr>
+                  <tr>
+                    <td style="text-align:center;color:var(--muted)">3</td>
+                    <td>
+                      <div style="font-weight:600;margin-bottom:3px">Real Skin Club IG Broadcast Channel Management</div>
+                      <div style="font-size:11px;color:var(--muted);line-height:1.5">Real Skin Club IG Broadcast Channel Management<br>- Monthly broadcast management<br>- 3-4x updates per month (mixture of resharing reels and…</div>
+                    </td>
+                    <td style="font-size:11px;color:var(--ink3)">5000 Sales Income</td>
+                    <td style="text-align:right">3.00</td>
+                    <td class="mono" style="text-align:right">2,000.00</td>
+                    <td class="mono" style="text-align:right;font-weight:600">6,000.00</td>
+                    <td class="mono" style="text-align:right">0.00</td>
+                    <td><select style="font-size:11px;border:1px solid var(--border);border-radius:4px;padding:2px 4px"><option>SV8</option></select></td>
+                    <td><button style="background:none;border:none;cursor:pointer;color:var(--muted);padding:0;display:flex;align-items:center"><i data-lucide="trash-2" style="width:14px;height:14px;stroke-width:1.8"></i></button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Add item row -->
+            <div style="padding:10px 20px;display:flex;align-items:center;gap:8px;border-top:1px solid var(--border)">
+              <button class="btn btn-ghost btn-sm" style="display:flex;align-items:center;gap:5px"><i data-lucide="plus" style="width:13px;height:13px;stroke-width:2"></i> Item</button>
+              <button class="btn btn-ghost btn-sm">···</button>
+              <button class="btn btn-ghost btn-sm" style="display:flex;align-items:center;gap:5px"><i data-lucide="file-text" style="width:13px;height:13px;stroke-width:1.8"></i> Transfer Items from… <span style="font-size:10px">˅</span></button>
+            </div>
+            <!-- Totals -->
+            <div style="display:flex;justify-content:flex-end;padding:16px 20px">
+              <table style="font-size:13px;min-width:320px">
+                <tr>
+                  <td style="padding:4px 0;color:var(--ink3)">Sub Total</td>
+                  <td style="text-align:right;width:50px;color:var(--muted);font-size:11px">RM</td>
+                  <td class="mono" style="text-align:right;padding-left:16px;min-width:100px">21,000.00</td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 0;color:var(--ink3)">Discount Given</td>
+                  <td style="text-align:right;color:var(--muted);font-size:11px">RM</td>
+                  <td class="mono" style="text-align:right;padding-left:16px"></td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 0;color:var(--ink3)">Service Tax (8%)</td>
+                  <td style="text-align:right;color:var(--muted);font-size:11px">RM</td>
+                  <td class="mono" style="text-align:right;padding-left:16px">1,680.00</td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 0;color:var(--ink3)">Rounding Adjustment <label style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;cursor:pointer"><input type="checkbox" style="accent-color:var(--teal)"><span style="font-size:11px;color:var(--muted)"></span></label></td>
+                  <td style="text-align:right;color:var(--muted);font-size:11px">RM</td>
+                  <td class="mono" style="text-align:right;padding-left:16px;color:var(--muted)">0.00</td>
+                </tr>
+                <tr style="border-top:2px solid var(--border)">
+                  <td style="padding:8px 0 4px;font-weight:700;font-size:14px;color:var(--ink)">TOTAL</td>
+                  <td style="text-align:right;color:var(--muted);font-size:11px;vertical-align:bottom;padding-bottom:4px">RM</td>
+                  <td class="mono" style="text-align:right;padding-left:16px;font-weight:700;font-size:15px;color:var(--ink)">22,680.00</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Terms -->
+        <div class="qv-section" id="inv-payment-terms">
+          <div>
+            <div class="qv-section-name">Payment Terms</div>
+            <div class="qv-section-desc"></div>
+          </div>
+          <div class="qv-body" style="padding:0">
+            <table class="tbl" style="font-size:12px">
+              <thead><tr><th>Term</th><th>Due On</th><th style="text-align:right">Amount</th><th>Description</th><th style="width:34px"></th></tr></thead>
+              <tbody>
+                <tr>
+                  <td class="mono">NET90</td>
+                  <td>23/06/2026</td>
+                  <td class="mono" style="text-align:right">22,680.00</td>
+                  <td style="color:var(--muted)">-</td>
+                  <td><button style="background:none;border:none;cursor:pointer;color:var(--muted);padding:0;display:flex;align-items:center"><i data-lucide="trash-2" style="width:14px;height:14px;stroke-width:1.8"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="padding:12px 20px;border-top:1px solid var(--border)">
+              <button class="btn btn-ghost btn-sm" style="display:flex;align-items:center;gap:5px"><i data-lucide="plus" style="width:13px;height:13px;stroke-width:2"></i> Term</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="qv-section" id="inv-additional">
+          <div>
+            <div class="qv-section-name">Additional Info</div>
+            <div class="qv-section-desc">Additional information such as remarks and country specific fields.</div>
+          </div>
+          <div class="qv-body">
+            <div class="qv-row" style="margin-bottom:14px">
+              <div class="qv-field" style="width:100%">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                  <div class="qv-label" style="margin:0">Remarks <span style="color:var(--teal);font-size:11px;cursor:pointer">(Styling Guide)</span></div>
+                  <button class="btn btn-ghost btn-sm" style="font-size:11px">Placeholders ˅</button>
+                </div>
+                <textarea class="qv-textarea" rows="4" style="width:100%;color:var(--muted);font-size:12px" placeholder="Remarks displayed on the form.
+Setup a default remarks in Control Panel -> Company Settings."></textarea>
+              </div>
+            </div>
+            <div class="qv-row qv-row-2">
+              <div class="qv-field">
+                <div class="qv-label">Customs Form No.</div>
+                <input class="qv-input" type="text" placeholder="">
+              </div>
+              <div class="qv-field">
+                <div class="qv-label">Customs K2 Form No.</div>
+                <input class="qv-input" type="text" placeholder="">
+              </div>
+            </div>
+            <div class="qv-row">
+              <div class="qv-field" style="max-width:340px">
+                <div class="qv-label">Incoterms</div>
+                <input class="qv-input" type="text" placeholder="">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attachments -->
+        <div class="qv-section" id="inv-attachments">
+          <div>
+            <div class="qv-section-name">Attachments</div>
+            <div class="qv-section-desc">Supporting documents attached to the transaction.</div>
+          </div>
+          <div class="qv-body">
+            <div class="qv-dropzone">
+              <div class="qv-dropzone-icon"><i data-lucide="upload-cloud" style="width:32px;height:32px;stroke-width:1.5"></i></div>
+              <div class="qv-dropzone-text">Drop files to upload<br>or select files from <span class="qv-dropzone-link">File Manager</span>.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="qv-section" id="inv-controls">
+          <div>
+            <div class="qv-section-name">Controls</div>
+            <div class="qv-section-desc">Controls and statuses for the transaction.</div>
+          </div>
+          <div class="qv-body">
+            <div class="qv-field" style="max-width:260px">
+              <div class="qv-label">Status</div>
+              <select class="qv-select"><option>Ready</option><option>Draft</option></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div class="qv-section" id="inv-history">
+          <div>
+            <div class="qv-section-name">History</div>
+            <div class="qv-section-desc">Action history performed on the transaction.</div>
+          </div>
+          <div class="qv-body" style="padding:0">
+            <table class="tbl" style="font-size:12px">
+              <thead><tr><th>Date</th><th>User</th><th>Channel</th><th>Action</th><th style="width:40px"></th></tr></thead>
+              <tbody>
+                <tr>
+                  <td style="color:var(--muted)">25/03/2026 2:42 pm</td>
+                  <td>Eric</td>
+                  <td><span class="qv-channel-pill"><span class="qv-ch-icon"><i data-lucide="file-text"></i></span> Transaction</span></td>
+                  <td>Created as Ready</td>
+                  <td style="text-align:right"><button class="qv-eye-btn"><i data-lucide="eye"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /qv-wrapper -->
+
+      <!-- Sticky bottom bar -->
+      <div class="qv-bottom-bar">
+        <div class="qv-qs-wrap">
+          <label class="qv-qs-label"><input type="checkbox" checked> QuickShare via Email</label>
+          <button class="qv-doc-btn"><i data-lucide="file-text"></i></button>
+        </div>
+        <div>
+          <button class="qv-save-btn">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ QUOTATIONS ════ -->
+    <div class="page" id="pg-quotations">
+      <!-- Page header: breadcrumb + action button -->
+      <div class="bk-page-header">
+        <div>
+          <div class="bk-breadcrumb">
+            <span>Sales</span>
+            <span class="bk-breadcrumb-sep">/</span>
+            <span style="color:var(--ink);font-weight:700">Quotations</span>
+          </div>
+          <div class="bk-page-desc">Quotations issued to your customers.</div>
+        </div>
+        <div class="bk-header-actions">
+          <div class="btn-new-wrap">
+            <button class="btn-new-primary">+ New</button>
+            <button class="btn-new-more">···</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <div class="filter-field">
+          <div class="filter-label">Date Range</div>
+          <div class="filter-date-wrap">
+            <input class="filter-date-input" type="text" placeholder="Start date">
+            <span class="date-arrow">→</span>
+            <input class="filter-date-input" type="text" placeholder="End date">
+            <span class="filter-date-icon"><i data-lucide="calendar"></i></span>
+          </div>
+        </div>
+        <div class="filter-field">
+          <div class="filter-label">Search ⓘ</div>
+          <input class="filter-search-input" type="text" placeholder="">
+        </div>
+        <div class="filter-field">
+          <div class="filter-label">Customer</div>
+          <select class="filter-customer-select"><option>All</option><option>Bank of China (Malaysia) Berhad</option><option>LIKE SNACKS TRADING LIMITED</option><option>Galderma Malaysia Sdn Bhd</option><option>Kumkang Kind Sdn Bhd</option><option>THE SWATCH GROUP (MALAYSIA) SDN BHD</option><option>Want Want Holdings Ltd</option></select>
+        </div>
+        <button class="filter-icon-btn" title="Search"><i data-lucide="search"></i></button>
+        <button class="filter-icon-btn" title="Reset"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+      <div class="more-filters-link">More Filters ˅</div>
+
+      <!-- List toolbar: action icons + pagination -->
+      <div class="list-toolbar">
+        <div class="list-actions">
+          <button class="list-action-btn" title="Print"><i data-lucide="printer"></i></button>
+          <button class="list-action-btn" title="Email"><i data-lucide="mail"></i></button>
+          <button class="list-action-btn" title="Convert"><i data-lucide="arrow-right-left"></i></button>
+          <button class="list-action-btn" title="Delete"><i data-lucide="trash-2"></i></button>
+        </div>
+        <div class="pagination">
+          <span class="pag-info">1-30 of 59 items</span>
+          <div class="pag-btns">
+            <button class="pag-btn">‹</button>
+            <button class="pag-btn pag-active">1</button>
+            <button class="pag-btn">2</button>
+            <button class="pag-btn">›</button>
+          </div>
+          <select class="pag-size-select"><option>30 / page</option><option>50 / page</option><option>100 / page</option></select>
+          <button class="pag-grid-btn" title="Grid view"><i data-lucide="layout-grid"></i></button>
+        </div>
+      </div>
+
+      <!-- Quotations table -->
+      <div class="card" style="overflow:hidden">
+        <table class="tbl" style="table-layout:fixed">
+          <colgroup>
+            <col style="width:36px">
+            <col style="width:110px">
+            <col style="width:108px">
+            <col>
+            <col style="width:46px">
+            <col style="width:100px">
+            <col style="width:80px">
+            <col style="width:72px">
+            <col style="width:110px">
+          </colgroup>
+          <thead>
+            <tr>
+              <th><input type="checkbox" style="accent-color:var(--teal)"></th>
+              <th class="sortable">No. <span class="sort-icon">⇅</span></th>
+              <th class="sortable">Date <span class="sort-icon">⇅</span></th>
+              <th class="sortable">Customer <span class="sort-icon">⇅</span></th>
+              <th></th>
+              <th class="sortable" style="text-align:right">Amount <span class="sort-icon">⇅</span></th>
+              <th>Status</th>
+              <th></th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">BSQ-0274</td>
+              <td style="font-size:12px">26/03/2026</td>
+              <td><span class="cust-link">Bank of China (Malaysia) Berhad <span class="ext-icon">↗</span></span></td>
+              <td style="font-size:11px;color:var(--muted)">RM</td>
+              <td class="mono" style="text-align:right;font-size:12px">2,160.00</td>
+              <td><span class="badge-ready">Ready</span></td>
+              <td><div class="row-icons"><button class="row-icon-btn" title="Email"><i data-lucide="mail"></i></button><button class="row-icon-btn" title="Convert"><i data-lucide="arrow-right-left"></i></button><button class="row-icon-btn" title="Attach"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openQuotationView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">BSQ-0273</td>
+              <td style="font-size:12px">17/03/2026</td>
+              <td><span class="cust-link">Bank of China (Malaysia) Berhad <span class="ext-icon">↗</span></span></td>
+              <td style="font-size:11px;color:var(--muted)">RM</td>
+              <td class="mono" style="text-align:right;font-size:12px">2,991.60</td>
+              <td><span class="badge-ready">Ready</span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="arrow-right-left"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openQuotationView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">BSQ-0272</td>
+              <td style="font-size:12px">17/03/2026</td>
+              <td><span class="cust-link">LIKE SNACKS TRADING LIMITED <span class="ext-icon">↗</span></span></td>
+              <td style="font-size:11px;color:var(--muted)">RM</td>
+              <td class="mono" style="text-align:right;font-size:12px">19,224.00</td>
+              <td><span class="badge-ready">Ready</span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="arrow-right-left"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openQuotationView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">BSQ-0271</td>
+              <td style="font-size:12px">15/03/2026</td>
+              <td><span class="cust-link">Galderma Malaysia Sdn Bhd <span class="ext-icon">↗</span></span></td>
+              <td style="font-size:11px;color:var(--muted)">RM</td>
+              <td class="mono" style="text-align:right;font-size:12px">53,600.00</td>
+              <td><span class="badge-ready">Ready</span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="arrow-right-left"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openQuotationView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">BSQ-0270</td>
+              <td style="font-size:12px">13/03/2026</td>
+              <td><span class="cust-link">Kumkang Kind Sdn Bhd <span class="ext-icon">↗</span></span></td>
+              <td style="font-size:11px;color:var(--muted)">RM</td>
+              <td class="mono" style="text-align:right;font-size:12px">160,000.00</td>
+              <td><span class="badge-ready">Ready</span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="arrow-right-left"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openQuotationView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">BSQ-0269</td>
+              <td style="font-size:12px">09/03/2026</td>
+              <td><span class="cust-link">THE SWATCH GROUP (MALAYSIA) SDN BHD <span class="ext-icon">↗</span></span></td>
+              <td style="font-size:11px;color:var(--muted)">RM</td>
+              <td class="mono" style="text-align:right;font-size:12px">1,701.00</td>
+              <td><span class="badge-ready">Ready</span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn has-action" title="Converted"><i data-lucide="arrow-right-left"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openQuotationView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">BSQ-0268</td>
+              <td style="font-size:12px">13/02/2026</td>
+              <td><span class="cust-link">THE SWATCH GROUP (MALAYSIA) SDN BHD <span class="ext-icon">↗</span></span></td>
+              <td style="font-size:11px;color:var(--muted)">RM</td>
+              <td class="mono" style="text-align:right;font-size:12px">1,701.00</td>
+              <td><span class="badge-ready">Ready</span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn has-action"><i data-lucide="arrow-right-left"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openQuotationView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">BSQ-0267</td>
+              <td style="font-size:12px">10/02/2026</td>
+              <td><span class="cust-link">Want Want Holdings Ltd <span class="ext-icon">↗</span></span></td>
+              <td style="font-size:11px;color:var(--muted)">RM</td>
+              <td class="mono" style="text-align:right;font-size:12px">116,640.00</td>
+              <td><span class="badge-ready">Ready</span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="arrow-right-left"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openQuotationView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">BSQ-0266</td>
+              <td style="font-size:12px">10/02/2026</td>
+              <td><span class="cust-link">Want Want Holdings Ltd <span class="ext-icon">↗</span></span></td>
+              <td style="font-size:11px;color:var(--muted)">RM</td>
+              <td class="mono" style="text-align:right;font-size:12px">9,720.00</td>
+              <td><span class="badge-ready">Ready</span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="arrow-right-left"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openQuotationView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">BSQ-0265</td>
+              <td style="font-size:12px">10/02/2026</td>
+              <td><span class="cust-link">Want Want Holdings Ltd <span class="ext-icon">↗</span></span></td>
+              <td style="font-size:11px;color:var(--muted)">RM</td>
+              <td class="mono" style="text-align:right;font-size:12px">108,000.00</td>
+              <td><span class="badge-ready">Ready</span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="arrow-right-left"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openQuotationView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">BSQ-0264</td>
+              <td style="font-size:12px">10/02/2026</td>
+              <td><span class="cust-link">Want Want Holdings Ltd <span class="ext-icon">↗</span></span></td>
+              <td style="font-size:11px;color:var(--muted)">RM</td>
+              <td class="mono" style="text-align:right;font-size:12px">9,000.00</td>
+              <td><span class="badge-ready">Ready</span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="arrow-right-left"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openQuotationView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ INVOICES ════ -->
+    <div class="page" id="pg-invoices">
+
+      <!-- Page header -->
+      <div class="bk-page-header">
+        <div>
+          <div class="bk-breadcrumb">
+            <span>Sales</span>
+            <span class="bk-breadcrumb-sep">/</span>
+            <span style="color:var(--ink);font-weight:700">Invoices</span>
+          </div>
+          <div class="bk-page-desc">Invoices issued to your customers.</div>
+        </div>
+        <div class="bk-header-actions">
+          <div class="btn-new-wrap">
+            <button class="btn-new-primary">+ New</button>
+            <button class="btn-new-more">···</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="bukku-tabs">
+        <div class="bukku-tab bukku-tab-active" onclick="selBukkuTab(this)">All <span class="bukku-tab-count">123</span></div>
+        <div class="bukku-tab" onclick="selBukkuTab(this)">Outstanding <span class="bukku-tab-count">18</span></div>
+        <div class="bukku-tab" onclick="selBukkuTab(this)">Coming Due <span class="bukku-tab-count">7</span></div>
+        <div class="bukku-tab" onclick="selBukkuTab(this)">Overdue <span class="bukku-tab-count">4</span></div>
+        <div class="bukku-tab" onclick="selBukkuTab(this)">Partially Paid <span class="bukku-tab-count">3</span></div>
+        <div class="bukku-tab" onclick="selBukkuTab(this)">Paid <span class="bukku-tab-count">91</span></div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="list-toolbar">
+        <div class="list-actions">
+          <button class="list-action-btn" title="Print"><i data-lucide="printer"></i></button>
+          <button class="list-action-btn" title="Send Email"><i data-lucide="mail"></i></button>
+          <button class="list-action-btn" title="Export"><i data-lucide="download"></i></button>
+          <button class="list-action-btn" title="Delete"><i data-lucide="trash-2"></i></button>
+        </div>
+        <div class="pagination">
+          <span class="pag-info">1–30 of 123 items</span>
+          <div class="pag-btns">
+            <button class="pag-btn">‹</button>
+            <button class="pag-btn pag-active">1</button>
+            <button class="pag-btn">2</button>
+            <button class="pag-btn">3</button>
+            <button class="pag-btn">4</button>
+            <button class="pag-btn">5</button>
+            <button class="pag-btn">›</button>
+          </div>
+          <select class="pag-size-select"><option>30 / page</option><option>50 / page</option><option>100 / page</option></select>
+          <button class="pag-grid-btn" title="Columns"><i data-lucide="layout-grid"></i></button>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <div class="filter-field">
+          <div class="filter-label">Date Range</div>
+          <div class="filter-date-wrap">
+            <input class="filter-date-input" type="text" placeholder="Start date">
+            <span class="date-arrow">→</span>
+            <input class="filter-date-input" type="text" placeholder="End date">
+            <span class="filter-date-icon"><i data-lucide="calendar"></i></span>
+          </div>
+        </div>
+        <div class="filter-field">
+          <div class="filter-label">Search ⓘ</div>
+          <input class="filter-search-input" type="text" placeholder="">
+        </div>
+        <div class="filter-field">
+          <div class="filter-label">Customer</div>
+          <select class="filter-customer-select"><option>All</option><option>Bank of China (Malaysia) Berhad</option><option>Kumkang Kind Sdn Bhd</option><option>Galderma Malaysia Sdn Bhd</option><option>THE SWATCH GROUP (MALAYSIA) SDN BHD</option><option>Want Want Holdings Ltd</option></select>
+        </div>
+        <div class="filter-field" style="align-self:flex-end;display:flex;gap:8px">
+          <button class="filter-icon-btn" title="Search"><i data-lucide="search"></i></button>
+          <button class="filter-icon-btn" title="Reset"><i data-lucide="rotate-ccw"></i></button>
+        </div>
+      </div>
+      <div class="more-filters-link">More Filters ˅</div>
+
+      <!-- Table -->
+      <div class="card" style="margin-top:0;padding:0;overflow:hidden">
+        <table class="tbl" style="font-size:12px">
+          <thead>
+            <tr>
+              <th style="width:36px"><input type="checkbox" style="accent-color:var(--teal)"></th>
+              <th class="sortable">No. <span class="sort-icon">⇅</span></th>
+              <th class="sortable">Date <span class="sort-icon">⇅</span></th>
+              <th class="sortable">Customer <span class="sort-icon">⇅</span></th>
+              <th class="sortable" style="text-align:right">Amount <span class="sort-icon">⇅</span></th>
+              <th class="sortable" style="text-align:right">Balance <span class="sort-icon">⇅</span></th>
+              <th>Status</th>
+              <th style="width:80px"></th>
+              <th style="width:100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">INV-000376</td>
+              <td style="font-size:12px">26/03/2026</td>
+              <td><span class="cust-link">Bank of China (Malaysia) Berhad <span class="ext-icon">↗</span></span></td>
+              <td class="mono" style="text-align:right;font-size:12px">2,160.00</td>
+              <td class="mono" style="text-align:right;font-size:12px;color:var(--red)">2,160.00</td>
+              <td><span class="inv-badge inv-badge-coming-due">Coming Due <span class="inv-badge-chevron">˅</span></span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openInvoiceView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">INV-000375</td>
+              <td style="font-size:12px">25/03/2026</td>
+              <td><span class="cust-link">LIKE SNACKS TRADING LIMITED <span class="ext-icon">↗</span></span></td>
+              <td class="mono" style="text-align:right;font-size:12px">19,224.00</td>
+              <td class="mono" style="text-align:right;font-size:12px;color:var(--red)">19,224.00</td>
+              <td><span class="inv-badge inv-badge-coming-due">Coming Due <span class="inv-badge-chevron">˅</span></span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openInvoiceView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">INV-000374</td>
+              <td style="font-size:12px">20/03/2026</td>
+              <td><span class="cust-link">Galderma Malaysia Sdn Bhd <span class="ext-icon">↗</span></span></td>
+              <td class="mono" style="text-align:right;font-size:12px">53,600.00</td>
+              <td class="mono" style="text-align:right;font-size:12px;color:var(--red)">53,600.00</td>
+              <td><span class="inv-badge inv-badge-overdue">Overdue <span class="inv-badge-chevron">˅</span></span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openInvoiceView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">INV-000373</td>
+              <td style="font-size:12px">18/03/2026</td>
+              <td><span class="cust-link">Kumkang Kind Sdn Bhd <span class="ext-icon">↗</span></span></td>
+              <td class="mono" style="text-align:right;font-size:12px">160,000.00</td>
+              <td class="mono" style="text-align:right;font-size:12px;color:var(--muted)">—</td>
+              <td><span class="inv-badge inv-badge-paid">Paid <span class="inv-badge-chevron">˅</span></span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openInvoiceView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">INV-000372</td>
+              <td style="font-size:12px">15/03/2026</td>
+              <td><span class="cust-link">THE SWATCH GROUP (MALAYSIA) SDN BHD <span class="ext-icon">↗</span></span></td>
+              <td class="mono" style="text-align:right;font-size:12px">1,701.00</td>
+              <td class="mono" style="text-align:right;font-size:12px;color:var(--teal)">850.50</td>
+              <td><span class="inv-badge inv-badge-partial">Partially Paid <span class="inv-badge-chevron">˅</span></span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openInvoiceView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">INV-000371</td>
+              <td style="font-size:12px">12/03/2026</td>
+              <td><span class="cust-link">Want Want Holdings Ltd <span class="ext-icon">↗</span></span></td>
+              <td class="mono" style="text-align:right;font-size:12px">116,640.00</td>
+              <td class="mono" style="text-align:right;font-size:12px;color:var(--amber)">116,640.00</td>
+              <td><span class="inv-badge inv-badge-outstanding">Outstanding <span class="inv-badge-chevron">˅</span></span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openInvoiceView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">INV-000370</td>
+              <td style="font-size:12px">10/03/2026</td>
+              <td><span class="cust-link">Want Want Holdings Ltd <span class="ext-icon">↗</span></span></td>
+              <td class="mono" style="text-align:right;font-size:12px">9,720.00</td>
+              <td class="mono" style="text-align:right;font-size:12px;color:var(--muted)">—</td>
+              <td><span class="inv-badge inv-badge-paid">Paid <span class="inv-badge-chevron">˅</span></span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openInvoiceView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">INV-000369</td>
+              <td style="font-size:12px">07/03/2026</td>
+              <td><span class="cust-link">Bank of China (Malaysia) Berhad <span class="ext-icon">↗</span></span></td>
+              <td class="mono" style="text-align:right;font-size:12px">108,000.00</td>
+              <td class="mono" style="text-align:right;font-size:12px;color:var(--muted)">—</td>
+              <td><span class="inv-badge inv-badge-paid">Paid <span class="inv-badge-chevron">˅</span></span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openInvoiceView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">INV-000368</td>
+              <td style="font-size:12px">05/03/2026</td>
+              <td><span class="cust-link">Galderma Malaysia Sdn Bhd <span class="ext-icon">↗</span></span></td>
+              <td class="mono" style="text-align:right;font-size:12px">9,000.00</td>
+              <td class="mono" style="text-align:right;font-size:12px;color:var(--red)">9,000.00</td>
+              <td><span class="inv-badge inv-badge-overdue">Overdue <span class="inv-badge-chevron">˅</span></span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openInvoiceView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">INV-000367</td>
+              <td style="font-size:12px">02/03/2026</td>
+              <td><span class="cust-link">LIKE SNACKS TRADING LIMITED <span class="ext-icon">↗</span></span></td>
+              <td class="mono" style="text-align:right;font-size:12px">2,991.60</td>
+              <td class="mono" style="text-align:right;font-size:12px;color:var(--amber)">2,991.60</td>
+              <td><span class="inv-badge inv-badge-outstanding">Outstanding <span class="inv-badge-chevron">˅</span></span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openInvoiceView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--teal)"></td>
+              <td class="mono" style="font-size:12px">INV-000366</td>
+              <td style="font-size:12px">28/02/2026</td>
+              <td><span class="cust-link">Kumkang Kind Sdn Bhd <span class="ext-icon">↗</span></span></td>
+              <td class="mono" style="text-align:right;font-size:12px">28,000.00</td>
+              <td class="mono" style="text-align:right;font-size:12px;color:var(--muted)">—</td>
+              <td><span class="inv-badge inv-badge-paid">Paid <span class="inv-badge-chevron">˅</span></span></td>
+              <td><div class="row-icons"><button class="row-icon-btn"><i data-lucide="mail"></i></button><button class="row-icon-btn"><i data-lucide="paperclip"></i></button></div></td>
+              <td><div style="display:flex"><button class="btn-tbl-view" onclick="openInvoiceView(this.closest('tr').querySelector('.mono').textContent)">View</button><button class="btn-tbl-more">···</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ EXPENSES ════ -->
+    <div class="page" id="pg-expenses">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div style="display:flex;gap:10px;">
+          <input type="text" placeholder="Search expenses…" style="width:230px">
+          <select><option>All Categories</option><option>Rent</option><option>Utilities</option><option>Salaries</option><option>EPF/SOCSO</option></select>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('newExpModal')">+ Record Expense</button>
+      </div>
+      <div class="alert alert-teal">Malaysian statutory contributions — EPF (13%), SOCSO, EIS — are auto-categorized for compliance reporting.</div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>Date</th><th>Supplier / Payee</th><th>Category</th><th>Reference</th><th style="text-align:right">Amount</th><th>Input Tax</th><th>Payment</th></tr></thead>
+          <tbody>
+            <tr><td>02 Jul 2025</td><td>Sri Hartamas Properties</td><td>Office Rent</td><td class="mono">EXP-0142</td><td class="mono" style="text-align:right">RM 4,500.00</td><td><span class="sst-pill">RM 270</span></td><td>Bank Transfer</td></tr>
+            <tr><td>01 Jul 2025</td><td>Tenaga Nasional Berhad</td><td>Utilities</td><td class="mono">EXP-0141</td><td class="mono" style="text-align:right">RM 1,240.00</td><td>—</td><td>Online Banking</td></tr>
+            <tr><td>30 Jun 2025</td><td>EPF (KWSP)</td><td>Statutory – EPF 13%</td><td class="mono">EPF-0612</td><td class="mono" style="text-align:right">RM 8,400.00</td><td>—</td><td>Auto-debit</td></tr>
+            <tr><td>30 Jun 2025</td><td>PERKESO (SOCSO)</td><td>Statutory – SOCSO</td><td class="mono">SOCSO-0612</td><td class="mono" style="text-align:right">RM 840.00</td><td>—</td><td>Auto-debit</td></tr>
+            <tr><td>28 Jun 2025</td><td>Telekom Malaysia</td><td>Utilities – Internet</td><td class="mono">EXP-0140</td><td class="mono" style="text-align:right">RM 280.00</td><td><span class="sst-pill">RM 17</span></td><td>Online Banking</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ CUSTOMERS ════ -->
+    <div class="page" id="pg-customers">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <input type="text" placeholder="Search customers…" style="width:280px">
+        <button class="btn btn-primary" onclick="openModal('newCustModal')">+ Add Customer</button>
+      </div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>Company</th><th>Contact</th><th>Email</th><th>State</th><th>SST Reg No.</th><th style="text-align:right">Outstanding</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><strong>Kumkang Kind Malaysia</strong></td><td>Mr. Kim</td><td>kim@kumkangkind.com.my</td><td>Kuala Lumpur</td><td class="mono">W20-1234-12345678</td><td class="mono" style="text-align:right;color:var(--green)">RM 0.00</td><td><button class="btn btn-ghost btn-sm">Manage</button></td></tr>
+            <tr><td><strong>Taghill Penang Sdn Bhd</strong></td><td>Ms. Lim</td><td>lim@taghill.com.my</td><td>Penang</td><td class="mono">W20-5678-87654321</td><td class="mono" style="text-align:right;color:var(--amber)">RM 15,000.00</td><td><button class="btn btn-ghost btn-sm">Manage</button></td></tr>
+            <tr><td><strong>Syarikat ABC Sdn Bhd</strong></td><td>Encik Ahmad</td><td>ahmad@abc.com.my</td><td>Selangor</td><td class="mono">—</td><td class="mono" style="text-align:right;color:var(--red)">RM 10,000.00</td><td><button class="btn btn-secondary btn-sm">Send Reminder</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ SUPPLIERS ════ -->
+    <div class="page" id="pg-suppliers">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <input type="text" placeholder="Search suppliers…" style="width:280px">
+        <button class="btn btn-primary">+ Add Supplier</button>
+      </div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>Supplier</th><th>Category</th><th>SST Reg No.</th><th>Contact</th><th style="text-align:right">YTD Spend</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Sri Hartamas Properties</strong></td><td>Property Rental</td><td class="mono">W20-1234-56789012</td><td>+60 3-1234 5678</td><td class="mono" style="text-align:right">RM 27,000.00</td></tr>
+            <tr><td><strong>Tenaga Nasional Berhad</strong></td><td>Utilities</td><td>Exempt</td><td>+60 3-2234 4506</td><td class="mono" style="text-align:right">RM 7,440.00</td></tr>
+            <tr><td><strong>Telekom Malaysia</strong></td><td>Telecommunications</td><td class="mono">W20-9876-54321098</td><td>100</td><td class="mono" style="text-align:right">RM 1,680.00</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ TRANSACTIONS ════ -->
+    <div class="page" id="pg-transactions">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div style="display:flex;gap:10px;">
+          <input type="text" placeholder="Search…" style="width:200px">
+          <select><option>All Accounts</option><option>Maybank Current</option><option>CIMB Business</option></select>
+          <input type="month" value="2025-07" style="width:150px">
+        </div>
+        <button class="btn btn-primary" onclick="openModal('newTxModal')">+ Add Transaction</button>
+      </div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>Date</th><th>Description</th><th>Account</th><th>Type</th><th style="text-align:right">Debit</th><th style="text-align:right">Credit</th><th style="text-align:right">Balance</th></tr></thead>
+          <tbody>
+            <tr><td>03 Jul 2025</td><td>Invoice Payment – Kumkang</td><td>Maybank Current</td><td><span class="badge badge-paid">Credit</span></td><td class="mono" style="text-align:right">—</td><td class="mono" style="text-align:right;color:var(--green)">RM 28,000.00</td><td class="mono" style="text-align:right;font-weight:600">RM 214,900.00</td></tr>
+            <tr><td>02 Jul 2025</td><td>Office Rental</td><td>Maybank Current</td><td><span class="badge badge-overdue">Debit</span></td><td class="mono" style="text-align:right;color:var(--red)">RM 4,500.00</td><td class="mono" style="text-align:right">—</td><td class="mono" style="text-align:right;font-weight:600">RM 186,900.00</td></tr>
+            <tr><td>30 Jun 2025</td><td>EPF Contribution</td><td>CIMB Business</td><td><span class="badge badge-overdue">Debit</span></td><td class="mono" style="text-align:right;color:var(--red)">RM 8,400.00</td><td class="mono" style="text-align:right">—</td><td class="mono" style="text-align:right;font-weight:600">RM 191,400.00</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ CHART OF ACCOUNTS ════ -->
+    <div class="page" id="pg-coa">
+      <div class="alert alert-teal">MASB-compliant chart of accounts, pre-configured for Malaysian businesses.</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card"><div class="card-head"><div class="card-title">Assets</div><button class="btn btn-ghost btn-sm">+ Add Account</button></div>
+          <table class="tbl"><thead><tr><th>Code</th><th>Account Name</th><th>Type</th><th style="text-align:right">Balance</th></tr></thead><tbody>
+            <tr><td class="mono">1100</td><td>Cash in Hand</td><td>Current Asset</td><td class="mono" style="text-align:right">RM 8,400.00</td></tr>
+            <tr><td class="mono">1110</td><td>Maybank Current Account</td><td>Current Asset</td><td class="mono" style="text-align:right">RM 142,600.00</td></tr>
+            <tr><td class="mono">1120</td><td>CIMB Business Account</td><td>Current Asset</td><td class="mono" style="text-align:right">RM 63,900.00</td></tr>
+            <tr><td class="mono">1200</td><td>Accounts Receivable</td><td>Current Asset</td><td class="mono" style="text-align:right">RM 62,480.00</td></tr>
+          </tbody></table>
+        </div>
+        <div class="card"><div class="card-head"><div class="card-title">Liabilities</div></div>
+          <table class="tbl"><thead><tr><th>Code</th><th>Account Name</th><th>Type</th><th style="text-align:right">Balance</th></tr></thead><tbody>
+            <tr><td class="mono">2100</td><td>Accounts Payable</td><td>Current Liability</td><td class="mono" style="text-align:right">RM 28,150.00</td></tr>
+            <tr><td class="mono">2200</td><td>SST Payable</td><td>Tax Liability</td><td class="mono" style="text-align:right">RM 9,210.00</td></tr>
+            <tr><td class="mono">2300</td><td>EPF/SOCSO Payable</td><td>Current Liability</td><td class="mono" style="text-align:right">RM 9,240.00</td></tr>
+          </tbody></table>
+        </div>
+        <div class="card"><div class="card-head"><div class="card-title">Revenue & Expenses</div></div>
+          <table class="tbl"><thead><tr><th>Code</th><th>Account Name</th><th>Type</th><th style="text-align:right">YTD</th></tr></thead><tbody>
+            <tr><td class="mono">4000</td><td>Service Revenue</td><td>Revenue</td><td class="mono" style="text-align:right;color:var(--green)">RM 487,320.00</td></tr>
+            <tr><td class="mono">5000</td><td>Salaries & Wages</td><td>Operating Expense</td><td class="mono" style="text-align:right;color:var(--red)">RM 198,000.00</td></tr>
+            <tr><td class="mono">5100</td><td>EPF – Employer Contribution (13%)</td><td>Statutory Expense</td><td class="mono" style="text-align:right;color:var(--red)">RM 25,740.00</td></tr>
+            <tr><td class="mono">5200</td><td>Rent & Office</td><td>Operating Expense</td><td class="mono" style="text-align:right;color:var(--red)">RM 27,000.00</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ JOURNAL ════ -->
+    <div class="page" id="pg-journal">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div style="font-size:12px;color:var(--muted);font-weight:500">Double-entry · all entries auto-balance to zero</div>
+        <button class="btn btn-primary">+ New Journal Entry</button>
+      </div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>Entry #</th><th>Date</th><th>Description</th><th>Account</th><th style="text-align:right">Debit</th><th style="text-align:right">Credit</th></tr></thead>
+          <tbody>
+            <tr><td class="mono" style="font-weight:700">JE-0041</td><td>03 Jul 2025</td><td>Invoice receipt</td><td>1110 Maybank Current</td><td class="mono" style="text-align:right">RM 28,000.00</td><td class="mono" style="text-align:right">—</td></tr>
+            <tr><td></td><td></td><td></td><td>1200 Accounts Receivable</td><td class="mono" style="text-align:right">—</td><td class="mono" style="text-align:right">RM 28,000.00</td></tr>
+            <tr><td colspan="6" style="height:2px;padding:0;background:var(--border)"></td></tr>
+            <tr><td class="mono" style="font-weight:700">JE-0040</td><td>02 Jul 2025</td><td>Office rent</td><td>5200 Rent Expense</td><td class="mono" style="text-align:right">RM 4,500.00</td><td class="mono" style="text-align:right">—</td></tr>
+            <tr><td></td><td></td><td></td><td>1110 Maybank Current</td><td class="mono" style="text-align:right">—</td><td class="mono" style="text-align:right">RM 4,500.00</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ SST ════ -->
+    <div class="page" id="pg-sst">
+      <div class="alert alert-teal">SST-02 return auto-populated per <strong>Royal Malaysian Customs Department (RMCD)</strong> requirements.</div>
+      <div class="period-row">
+        <span style="font-size:11px;color:var(--muted);font-weight:700">Period:</span>
+        <div class="period-btn" onclick="selPeriod(this)">Jan–Feb 2025</div>
+        <div class="period-btn" onclick="selPeriod(this)">Mar–Apr 2025</div>
+        <div class="period-btn active" onclick="selPeriod(this)">May–Jun 2025</div>
+        <div class="period-btn" onclick="selPeriod(this)">Jul–Aug 2025</div>
+        <button class="btn btn-ghost btn-sm" style="margin-left:auto;display:flex;align-items:center;gap:5px"><i data-lucide="download" style="width:13px;height:13px;stroke-width:1.8"></i> Export SST-02</button>
+        <button class="btn btn-primary btn-sm">Submit to RMCD</button>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="sst-box">
+            <div class="sst-box-title">Part A — Output Tax (Sales)</div>
+            <div class="sst-row"><span>Standard Rated Sales (6%)</span><span class="mono">RM 307,000.00</span></div>
+            <div class="sst-row"><span>Zero Rated / Exempt</span><span class="mono">RM 0.00</span></div>
+            <div class="sst-row" style="font-weight:700"><span>Total Output Tax</span><span class="mono" style="color:var(--green)">RM 18,420.00</span></div>
+          </div>
+          <div class="sst-box">
+            <div class="sst-box-title">Part B — Input Tax (Purchases)</div>
+            <div class="sst-row"><span>Taxable Purchases</span><span class="mono">RM 153,500.00</span></div>
+            <div class="sst-row"><span>Input Tax Claimable</span><span class="mono">RM 9,210.00</span></div>
+            <div class="sst-row"><span>Non-Claimable</span><span class="mono">RM 0.00</span></div>
+            <div class="sst-row" style="font-weight:700"><span>Total Input Tax</span><span class="mono" style="color:var(--red)">RM 9,210.00</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="sst-box" style="margin-bottom:14px;">
+            <div class="sst-box-title">SST-02 Filing Details</div>
+            <div class="sst-row"><span>Taxable Period</span><span style="font-weight:600">May–Jun 2025</span></div>
+            <div class="sst-row"><span>SST Registration No.</span><span class="mono">W20-2501-20012345</span></div>
+            <div class="sst-row"><span>Business Code (MSIC)</span><span class="mono">62010</span></div>
+            <div class="sst-row"><span>Filing Deadline</span><span style="color:var(--orange);font-weight:700">28 Jul 2025</span></div>
+          </div>
+          <div class="sst-payable" style="margin-bottom:12px;">
+            <div><div class="lbl">Net SST Payable to RMCD</div><div style="font-size:11px;opacity:0.7;margin-top:3px">Output Tax − Input Tax</div></div>
+            <div class="amt">RM 9,210.00</div>
+          </div>
+          <div class="alert alert-orange"><i data-lucide="alert-triangle" style="width:13px;height:13px;stroke-width:1.8;vertical-align:-2px;margin-right:4px"></i>Late submission penalty: RM 10,000 or 200% of tax unpaid — whichever is greater (Section 30, SST Act 2018).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ REPORTS ════ -->
+    <div class="page" id="pg-reports">
+      <div class="grid-report">
+        <div class="card" style="cursor:pointer" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div class="card-body" style="text-align:center;padding:28px 20px">
+            <div style="width:48px;height:48px;background:var(--teal-light);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--teal)"><i data-lucide="bar-chart-2" style="width:22px;height:22px;stroke-width:1.8"></i></div>
+            <div style="font-weight:700;font-size:14px;color:var(--ink)">Profit & Loss</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Income Statement</div>
+          </div>
+        </div>
+        <div class="card" style="cursor:pointer" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div class="card-body" style="text-align:center;padding:28px 20px">
+            <div style="width:48px;height:48px;background:var(--orange-light);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--orange)"><i data-lucide="landmark" style="width:22px;height:22px;stroke-width:1.8"></i></div>
+            <div style="font-weight:700;font-size:14px;color:var(--ink)">Balance Sheet</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Financial Position</div>
+          </div>
+        </div>
+        <div class="card" style="cursor:pointer" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div class="card-body" style="text-align:center;padding:28px 20px">
+            <div style="width:48px;height:48px;background:var(--green-bg);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--green)"><i data-lucide="trending-up" style="width:22px;height:22px;stroke-width:1.8"></i></div>
+            <div style="font-weight:700;font-size:14px;color:var(--ink)">Cash Flow</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Cashflow Statement</div>
+          </div>
+        </div>
+        <div class="card" style="cursor:pointer" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div class="card-body" style="text-align:center;padding:28px 20px">
+            <div style="width:48px;height:48px;background:var(--teal-light);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--teal)"><i data-lucide="receipt" style="width:22px;height:22px;stroke-width:1.8"></i></div>
+            <div style="font-weight:700;font-size:14px;color:var(--ink)">SST Report</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Tax Summary</div>
+          </div>
+        </div>
+        <div class="card" style="cursor:pointer" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div class="card-body" style="text-align:center;padding:28px 20px">
+            <div style="width:48px;height:48px;background:var(--amber-bg);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--amber)"><i data-lucide="users" style="width:22px;height:22px;stroke-width:1.8"></i></div>
+            <div style="font-weight:700;font-size:14px;color:var(--ink)">Receivables Aging</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Debtor Analysis</div>
+          </div>
+        </div>
+        <div class="card" style="cursor:pointer" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div class="card-body" style="text-align:center;padding:28px 20px">
+            <div style="width:48px;height:48px;background:var(--red-bg);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--red)"><i data-lucide="package" style="width:22px;height:22px;stroke-width:1.8"></i></div>
+            <div style="font-weight:700;font-size:14px;color:var(--ink)">Payables Aging</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Creditor Analysis</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P&L Preview -->
+      <div class="card">
+        <div class="card-head">
+          <div><div class="card-title">Profit & Loss — YTD 2025</div><div class="card-sub">Jan 2025 – Jul 2025</div></div>
+          <button class="btn btn-ghost btn-sm" style="display:flex;align-items:center;gap:5px"><i data-lucide="download" style="width:13px;height:13px;stroke-width:1.8"></i> Export PDF</button>
+        </div>
+        <div class="card-body">
+          <div class="pl-section-head" style="color:var(--green)">Revenue</div>
+          <div class="pl-row"><span>Service Revenue</span><span class="mono">RM 487,320.00</span></div>
+          <div class="pl-total"><span>Total Revenue</span><span class="mono" style="color:var(--green)">RM 487,320.00</span></div>
+          <div style="height:14px"></div>
+          <div class="pl-section-head" style="color:var(--red)">Operating Expenses</div>
+          <div class="pl-row"><span>Salaries & Wages</span><span class="mono">RM 198,000.00</span></div>
+          <div class="pl-row"><span>EPF – Employer Contribution</span><span class="mono">RM 25,740.00</span></div>
+          <div class="pl-row"><span>SOCSO & EIS</span><span class="mono">RM 5,880.00</span></div>
+          <div class="pl-row"><span>Rent & Office</span><span class="mono">RM 27,000.00</span></div>
+          <div class="pl-row"><span>Utilities</span><span class="mono">RM 10,640.00</span></div>
+          <div class="pl-total"><span>Total Expenses</span><span class="mono" style="color:var(--red)">RM 267,260.00</span></div>
+          <div class="pl-grand">
+            <span style="font-weight:800;font-size:15px">Net Profit (YTD)</span>
+            <span class="mono" style="font-size:22px;font-weight:700">RM 220,060.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+    <!-- ════ TAX RATES ════ -->
+    <div class="page" id="pg-tax">
+      <div class="bk-page-header">
+        <div>
+          <div class="bk-breadcrumb">
+            <span>Control Panel</span>
+            <span class="bk-breadcrumb-sep">/</span>
+            <span style="color:var(--ink);font-weight:700">Tax Rates</span>
+          </div>
+          <div class="bk-page-desc">Manage tax codes and rates applied to your transactions.</div>
+        </div>
+        <div class="bk-header-actions">
+          <button class="btn-new-primary" onclick="openTaxModal()">+ New Tax</button>
+        </div>
+      </div>
+
+      <div class="card" style="overflow:hidden">
+        <table class="tbl" id="taxTable">
+          <thead>
+            <tr>
+              <th>Tax Code</th>
+              <th>Tax Name</th>
+              <th>Rate (%)</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th style="text-align:right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="taxTableBody">
+            <!-- Rows injected by JS -->
+          </tbody>
+        </table>
+        <div id="taxEmpty" style="display:none;padding:40px;text-align:center;color:var(--muted);font-size:13px">
+          No tax rates configured. Click <strong>+ New Tax</strong> to add one.
+        </div>
+      </div>
+    </div>
+
+<!-- ════ MODALS ════ -->
+
+<!-- Tax Modal -->
+<div class="modal-bg" id="taxModal">
+  <div class="modal" style="width:480px">
+    <div class="modal-title" id="taxModalTitle">New Tax Rate</div>
+    <input type="hidden" id="taxEditIndex" value="">
+    <div class="form-grid">
+      <div class="fg">
+        <label>Tax Code <span style="color:var(--red)">*</span></label>
+        <input id="taxCode" placeholder="e.g. SV8" style="text-transform:uppercase">
+      </div>
+      <div class="fg">
+        <label>Rate (%) <span style="color:var(--red)">*</span></label>
+        <input id="taxRate" type="number" min="0" max="100" step="0.01" placeholder="e.g. 8">
+      </div>
+      <div class="fg full">
+        <label>Tax Name <span style="color:var(--red)">*</span></label>
+        <input id="taxName" placeholder="e.g. Service Tax">
+      </div>
+      <div class="fg">
+        <label>Type</label>
+        <select id="taxType">
+          <option value="Sales">Sales</option>
+          <option value="Purchase">Purchase</option>
+          <option value="Both">Both</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Status</label>
+        <select id="taxStatus">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
+      </div>
+      <div class="fg full">
+        <label>Description</label>
+        <input id="taxDesc" placeholder="Optional description">
+      </div>
+    </div>
+    <div id="taxError" style="display:none;margin-top:10px;padding:8px 12px;background:var(--red-bg);color:var(--red);border-radius:var(--radius-sm);font-size:12px"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('taxModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTax()">Save Tax</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODALS ════ -->
+
+<!-- New Invoice -->
+<div class="modal-bg" id="newInvModal">
+  <div class="modal modal-wide">
+    <div class="modal-title">New Tax Invoice</div>
+    <div class="form-grid">
+      <div class="fg"><label>Customer *</label><select><option>Select Customer…</option><option>Kumkang Kind Malaysia</option><option>Taghill Penang</option></select></div>
+      <div class="fg"><label>Invoice Number</label><input value="INV-0088" readonly style="color:var(--muted)"></div>
+      <div class="fg"><label>Issue Date</label><input type="date" value="2025-07-10"></div>
+      <div class="fg"><label>Due Date</label><input type="date" value="2025-08-09"></div>
+      <div class="fg"><label>Currency</label><select><option>MYR – Malaysian Ringgit</option><option>USD – US Dollar</option><option>SGD – Singapore Dollar</option></select></div>
+      <div class="fg"><label>SST Rate</label><select><option>6% SST</option><option>0% (Exempt)</option><option>0% (Zero-rated)</option></select></div>
+    </div>
+    <div style="margin-top:16px;">
+      <div class="line-items-grid line-header"><div>Description</div><div>Qty</div><div>Unit Price (RM)</div><div>Subtotal</div><div></div></div>
+      <div id="lineItems">
+        <div class="line-items-grid line-row">
+          <div><input type="text" placeholder="Service description…" style="width:100%"></div>
+          <div><input type="number" value="1" style="width:100%"></div>
+          <div><input type="number" placeholder="0.00" style="width:100%"></div>
+          <div class="mono" style="font-size:12px;color:var(--ink3)">RM 0.00</div>
+          <div style="color:var(--red);cursor:pointer;font-size:16px">×</div>
+        </div>
+      </div>
+      <div class="add-line-btn" onclick="addLine()">+ Add Line Item</div>
+    </div>
+    <div class="total-block">
+      <div class="total-row"><span class="t-lbl">Subtotal</span><span class="t-val">RM 0.00</span></div>
+      <div class="total-row"><span class="t-lbl">SST (6%)</span><span class="t-val">RM 0.00</span></div>
+      <div class="total-row grand"><span class="t-lbl">Total (MYR)</span><span class="t-val">RM 0.00</span></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('newInvModal')">Cancel</button>
+      <button class="btn btn-ghost">Save as Draft</button>
+      <button class="btn btn-primary">Save & Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Transaction -->
+<div class="modal-bg" id="newTxModal">
+  <div class="modal">
+    <div class="modal-title">Add Transaction</div>
+    <div class="form-grid">
+      <div class="fg"><label>Date *</label><input type="date" value="2025-07-10"></div>
+      <div class="fg"><label>Type</label><select><option>Income</option><option>Expense</option><option>Transfer</option></select></div>
+      <div class="fg full"><label>Description *</label><input placeholder="Enter description…"></div>
+      <div class="fg"><label>Account</label><select><option>Maybank Current</option><option>CIMB Business</option><option>Cash in Hand</option></select></div>
+      <div class="fg"><label>Amount (RM) *</label><input type="number" placeholder="0.00"></div>
+      <div class="fg"><label>Category</label><select><option>Service Revenue</option><option>Office Rent</option><option>Utilities</option><option>Salaries</option><option>EPF/SOCSO</option></select></div>
+      <div class="fg"><label>Reference No.</label><input placeholder="INV/EXP/REF…"></div>
+      <div class="fg full"><label>Notes</label><textarea placeholder="Optional notes…"></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('newTxModal')">Cancel</button>
+      <button class="btn btn-primary">Save Transaction</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Expense -->
+<div class="modal-bg" id="newExpModal">
+  <div class="modal">
+    <div class="modal-title">Record Expense</div>
+    <div class="form-grid">
+      <div class="fg"><label>Date *</label><input type="date" value="2025-07-10"></div>
+      <div class="fg"><label>Supplier</label><select><option>— Select —</option><option>Sri Hartamas Properties</option><option>Tenaga Nasional</option><option>Telekom Malaysia</option></select></div>
+      <div class="fg full"><label>Description *</label><input placeholder="Expense description…"></div>
+      <div class="fg"><label>Category</label><select><option>Office Rent</option><option>Utilities</option><option>Salaries</option><option>EPF</option><option>SOCSO</option><option>EIS</option></select></div>
+      <div class="fg"><label>Amount (RM) *</label><input type="number" placeholder="0.00"></div>
+      <div class="fg"><label>SST</label><select><option>No SST</option><option>6% SST Claimable</option></select></div>
+      <div class="fg"><label>Payment Method</label><select><option>Bank Transfer</option><option>Online Banking</option><option>Cash</option><option>Auto-debit</option></select></div>
+      <div class="fg"><label>Receipt / Ref</label><input placeholder="Receipt number…"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('newExpModal')">Cancel</button>
+      <button class="btn btn-primary">Save Expense</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Customer -->
+<div class="modal-bg" id="newCustModal">
+  <div class="modal">
+    <div class="modal-title">Add Customer</div>
+    <div class="form-grid">
+      <div class="fg full"><label>Company Name *</label><input placeholder="e.g. Syarikat XYZ Sdn Bhd"></div>
+      <div class="fg"><label>Contact Person</label><input placeholder="Full name"></div>
+      <div class="fg"><label>Phone</label><input placeholder="+60 3-XXXX XXXX"></div>
+      <div class="fg"><label>Email</label><input type="email" placeholder="email@company.com.my"></div>
+      <div class="fg"><label>State</label><select><option>Select…</option><option>Kuala Lumpur</option><option>Selangor</option><option>Penang</option><option>Johor</option><option>Perak</option><option>Sabah</option><option>Sarawak</option></select></div>
+      <div class="fg"><label>SST Reg No.</label><input placeholder="W20-XXXX-XXXXXXXX"></div>
+      <div class="fg"><label>ROC / SSM No.</label><input placeholder="1234567-X"></div>
+      <div class="fg"><label>Payment Terms</label><select><option>30 Days</option><option>14 Days</option><option>60 Days</option><option>COD</option></select></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('newCustModal')">Cancel</button>
+      <button class="btn btn-primary">Save Customer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Company Switch -->
+<div class="modal-bg" id="coModal">
+  <div class="modal" style="width:400px">
+    <div class="modal-title">Switch Company</div>
+    <div class="co-item selected">
+      <div class="co-item-name">BETA Social Sdn Bhd</div>
+      <div class="co-item-sub">SST Registered · 1234567-X · Puchong, Selangor</div>
+    </div>
+    <div class="co-item">
+      <div class="co-item-name">Eric Soh Consulting</div>
+      <div class="co-item-sub">Sole Proprietor · Not SST Registered</div>
+    </div>
+    <div class="co-add">+ Add New Company</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('coModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Pages config
+const pgConfig = {
+  dashboard:    { title:'Dashboard',          sub:'Financial Year 2025 · Ringgit Malaysia (MYR)' },
+  quotations:      { title:'Sales / Quotations', sub:'Quotations issued to your customers.' },
+  'quotation-view':{ title:'Sales / BSQ-0274',  sub:'Quotation detail' },
+  invoices:        { title:'Sales / Invoices',      sub:'Invoices issued to your customers.' },
+  'invoice-view':  { title:'Sales / INV-000376',   sub:'Invoice detail' },
+  expenses:     { title:'Expenses',           sub:'Record and categorize your business expenses' },
+  customers:    { title:'Customers',          sub:'Manage your customer database' },
+  suppliers:    { title:'Suppliers',          sub:'Manage your supplier records' },
+  transactions: { title:'Transactions',       sub:'All bank and cash transactions' },
+  coa:          { title:'Chart of Accounts',  sub:'MASB-compliant account structure' },
+  journal:      { title:'Journal Entries',    sub:'Double-entry accounting records' },
+  sst:          { title:'SST / GST Return',   sub:'Royal Malaysian Customs Department (RMCD)' },
+  reports:      { title:'Financial Reports',  sub:'P&L · Balance Sheet · Cash Flow · SST' },
+};
+
+function nav(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item,.nav-sub-item').forEach(n => n.classList.remove('active'));
+  const pg = document.getElementById('pg-' + id);
+  if (pg) pg.classList.add('active');
+  if (el) { el.classList.add('active'); }
+  else {
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if ((n.getAttribute('onclick')||'').includes("'"+id+"'")) n.classList.add('active');
+    });
+  }
+  const c = pgConfig[id] || {};
+  document.getElementById('pgTitle').textContent = c.title || id;
+  document.getElementById('pgSub').textContent = c.sub || '';
+}
+
+// Nav sub-item handler (same as nav but for sub-items)
+function navSub(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item,.nav-sub-item').forEach(n => n.classList.remove('active'));
+  const pg = document.getElementById('pg-' + id);
+  if (pg) pg.classList.add('active');
+  if (el) el.classList.add('active');
+  const c = pgConfig[id] || {};
+  document.getElementById('pgTitle').textContent = c.title || id;
+  document.getElementById('pgSub').textContent = c.sub || '';
+  // Page-specific init hooks
+  if (id === 'tax') renderTaxTable();
+}
+
+// Quotation detail tab scroll
+function qvTab(el, sectionId) {
+  document.querySelectorAll('.qv-tab').forEach(t => t.classList.remove('qv-active'));
+  el.classList.add('qv-active');
+  const sec = document.getElementById(sectionId);
+  if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Tax toggle
+function qvTaxToggle(el) {
+  el.closest('.qv-tax-toggle').querySelectorAll('.qv-tax-btn').forEach(b => b.classList.remove('qv-tax-active'));
+  el.classList.add('qv-tax-active');
+}
+
+// Open quotation view
+function openQuotationView(ref) {
+  navSub('quotation-view', null);
+  document.getElementById('pgTitle').textContent = 'Sales / ' + (ref || 'Quotation');
+  document.getElementById('pgSub').textContent = 'Quotation detail';
+  // Reset tabs to first tab only within quotation-view
+  document.querySelectorAll('#pg-quotation-view .qv-tab').forEach((t,i) => t.classList.toggle('qv-active', i===0));
+}
+
+// Open invoice view
+function openInvoiceView(ref) {
+  navSub('invoice-view', null);
+  document.getElementById('pgTitle').textContent = 'Sales / ' + (ref || 'Invoice');
+  document.getElementById('pgSub').textContent = 'Invoice detail';
+  // Reset tabs to first tab only within invoice-view
+  document.querySelectorAll('#pg-invoice-view .qv-tab').forEach((t,i) => t.classList.toggle('qv-active', i===0));
+  // Re-render icons for dynamically shown page
+  lucide.createIcons();
+}
+
+// Toggle sidebar expandable groups
+function toggleNav(el) {
+  el.classList.toggle('nav-open');
+  const subList = el.nextElementSibling;
+  if (subList && subList.classList.contains('nav-sub-list')) {
+    subList.classList.toggle('nav-open');
+  }
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-bg').forEach(bg => bg.addEventListener('click', e => { if(e.target===bg) bg.classList.remove('open'); }));
+
+function selTab(el) { el.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); }
+function selBukkuTab(el) { el.closest('.bukku-tabs').querySelectorAll('.bukku-tab').forEach(t=>t.classList.remove('bukku-tab-active')); el.classList.add('bukku-tab-active'); }
+function selPeriod(el) { el.closest('.period-row').querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active'); }
+
+// ── TAX RATES MANAGEMENT ──
+const defaultTaxes = [
+  { code:'SV8',  name:'Service Tax',      rate:8,   type:'Sales',    status:'Active',   desc:'Malaysia Service Tax (8%)' },
+  { code:'SV6',  name:'Service Tax',      rate:6,   type:'Sales',    status:'Inactive', desc:'Malaysia Service Tax (6% - old rate)' },
+  { code:'GST0', name:'GST Exempt',       rate:0,   type:'Both',     status:'Active',   desc:'GST Exempt supply' },
+  { code:'NOTAX',name:'No Tax',           rate:0,   type:'Both',     status:'Active',   desc:'Zero rated / no tax' },
+];
+let taxes = JSON.parse(localStorage.getItem('sw_taxes') || 'null') || defaultTaxes;
+
+function saveTaxesToStorage() { localStorage.setItem('sw_taxes', JSON.stringify(taxes)); }
+
+function renderTaxTable() {
+  const tbody = document.getElementById('taxTableBody');
+  const empty = document.getElementById('taxEmpty');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  if (taxes.length === 0) { empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  taxes.forEach((t, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="mono" style="font-weight:700;font-size:13px">${escHtml(t.code)}</span></td>
+      <td>${escHtml(t.name)}${t.desc ? `<div style="font-size:11px;color:var(--muted);margin-top:1px">${escHtml(t.desc)}</div>` : ''}</td>
+      <td><span style="font-family:'DM Mono',monospace;font-weight:600;color:var(--ink)">${t.rate}%</span></td>
+      <td><span style="font-size:12px;color:var(--ink3)">${escHtml(t.type)}</span></td>
+      <td><span class="badge ${t.status==='Active'?'badge-paid':'badge-draft'}">${t.status==='Active'?'● Active':'○ Inactive'}</span></td>
+      <td style="text-align:right">
+        <button class="btn btn-ghost btn-sm" onclick="editTax(${i})" style="margin-right:4px">Edit</button>
+        <button class="btn btn-ghost btn-sm" onclick="deleteTax(${i})" style="color:var(--red);border-color:var(--red-bg)">Delete</button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function openTaxModal(editIdx) {
+  document.getElementById('taxModalTitle').textContent = editIdx !== undefined ? 'Edit Tax Rate' : 'New Tax Rate';
+  document.getElementById('taxEditIndex').value = editIdx !== undefined ? editIdx : '';
+  document.getElementById('taxError').style.display = 'none';
+  if (editIdx !== undefined) {
+    const t = taxes[editIdx];
+    document.getElementById('taxCode').value   = t.code;
+    document.getElementById('taxName').value   = t.name;
+    document.getElementById('taxRate').value   = t.rate;
+    document.getElementById('taxType').value   = t.type;
+    document.getElementById('taxStatus').value = t.status;
+    document.getElementById('taxDesc').value   = t.desc || '';
+  } else {
+    ['taxCode','taxName','taxRate','taxDesc'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('taxType').value   = 'Sales';
+    document.getElementById('taxStatus').value = 'Active';
+  }
+  openModal('taxModal');
+}
+
+function editTax(i) { openTaxModal(i); }
+
+function deleteTax(i) {
+  if (!confirm(`Delete tax "${taxes[i].code} – ${taxes[i].name}"?`)) return;
+  taxes.splice(i, 1);
+  saveTaxesToStorage();
+  renderTaxTable();
+}
+
+function saveTax() {
+  const code   = document.getElementById('taxCode').value.trim().toUpperCase();
+  const name   = document.getElementById('taxName').value.trim();
+  const rate   = parseFloat(document.getElementById('taxRate').value);
+  const type   = document.getElementById('taxType').value;
+  const status = document.getElementById('taxStatus').value;
+  const desc   = document.getElementById('taxDesc').value.trim();
+  const errEl  = document.getElementById('taxError');
+  const editIdx = document.getElementById('taxEditIndex').value;
+
+  if (!code)            { showTaxErr('Tax code is required.'); return; }
+  if (!name)            { showTaxErr('Tax name is required.'); return; }
+  if (isNaN(rate) || rate < 0 || rate > 100) { showTaxErr('Rate must be between 0 and 100.'); return; }
+  // Duplicate code check (skip self when editing)
+  const dupIdx = taxes.findIndex(t => t.code === code);
+  if (dupIdx !== -1 && dupIdx !== parseInt(editIdx)) { showTaxErr(`Tax code "${code}" already exists.`); return; }
+
+  const entry = { code, name, rate, type, status, desc };
+  if (editIdx !== '') { taxes[parseInt(editIdx)] = entry; }
+  else { taxes.push(entry); }
+
+  saveTaxesToStorage();
+  renderTaxTable();
+  closeModal('taxModal');
+}
+
+function showTaxErr(msg) {
+  const el = document.getElementById('taxError');
+  el.textContent = msg; el.style.display = '';
+}
+
+// pgConfig additions for Control Panel pages
+pgConfig['tax']      = { title:'Control Panel / Tax Rates',      sub:'Manage tax codes and rates applied to your transactions.' };
+pgConfig['settings'] = { title:'Control Panel / General Settings', sub:'Configure your account settings.' };
+
+// Bar chart
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul'];
+const rev = [52,61,48,72,68,82,79];
+const exp = [38,42,35,52,44,59,52];
+const maxV = Math.max(...rev);
+const bc = document.getElementById('barChart');
+months.forEach((m,i) => {
+  const g = document.createElement('div');
+  g.className = 'bar-group';
+  const rh = Math.round((rev[i]/maxV)*95);
+  const eh = Math.round((exp[i]/maxV)*95);
+  g.innerHTML = `<div class="bar-pair" style="height:100px"><div class="bar income" style="height:${rh}%" title="Revenue: RM ${rev[i]}k"></div><div class="bar expense" style="height:${eh}%" title="Expenses: RM ${exp[i]}k"></div></div><div class="bar-lbl">${m}</div>`;
+  bc.appendChild(g);
+});
+
+// Init Lucide icons
+lucide.createIcons();
+
+// Add line item
+function addLine() {
+  const container = document.getElementById('lineItems');
+  const div = document.createElement('div');
+  div.className = 'line-items-grid line-row';
+  div.innerHTML = `<div><input type="text" placeholder="Service description…" style="width:100%"></div><div><input type="number" value="1" style="width:100%"></div><div><input type="number" placeholder="0.00" style="width:100%"></div><div class="mono" style="font-size:12px;color:var(--ink3)">RM 0.00</div><div style="color:var(--red);cursor:pointer;font-size:16px" onclick="this.closest('.line-items-grid').remove()">×</div>`;
+  container.appendChild(div);
+}
+</script>
+</body>
+</html>
